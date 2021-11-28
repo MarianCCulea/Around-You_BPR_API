@@ -33,14 +33,14 @@ const listingValidationRules = () => {
   return [
     check('title').notEmpty().withMessage('Title or email is required'),
     check('descrpition').notEmpty().withMessage('Descrpition is required'),
-    check('floor').notEmpty().withMessage('floor is required'),
-    check('floor_no').notEmpty().withMessage('floor_no is required'),
-    check('price').notEmpty().withMessage('price is required'),
-    check('street').notEmpty().isEmail().withMessage('street email is required'),
-    check('house_no').notEmpty().withMessage('house_no is required'),
-    check('city').notEmpty().withMessage('city is required'),
-    check('postal_code').notEmpty().withMessage('postal_code is required'),
-    check('room').notEmpty().withMessage('room is required'),
+    check('floor').notEmpty().withMessage('Floor is required'),
+    check('floor_no').notEmpty().withMessage('Floor number is required'),
+    check('price').notEmpty().withMessage('Price is required'),
+    check('street').notEmpty().isEmail().withMessage('Street is required'),
+    check('house_no').notEmpty().withMessage('House number is required'),
+    check('city').notEmpty().withMessage('City is required'),
+    check('postal_code').notEmpty().withMessage('Postal code is required'),
+    check('room').notEmpty().withMessage('Room is required'),
   ]
 }
 
