@@ -31,13 +31,14 @@ const messageValidationRules = () => {
 
 const listingValidationRules = () => {
   return [
-    check('title').notEmpty().withMessage('Title or email is required'),
-    check('descrpition').notEmpty().withMessage('Descrpition is required'),
+    check('title').notEmpty().withMessage('Title is required'),
+    check('description').notEmpty().withMessage('Description is required'),
     check('floor').notEmpty().withMessage('Floor is required'),
     check('floor_no').notEmpty().withMessage('Floor number is required'),
     check('price').notEmpty().withMessage('Price is required'),
-    check('street').notEmpty().isEmail().withMessage('Street is required'),
+    check('street').notEmpty().withMessage('Street is required'),
     check('house_no').notEmpty().withMessage('House number is required'),
+    check('door_no').notEmpty().withMessage('Door number is required'),
     check('city').notEmpty().withMessage('City is required'),
     check('postal_code').notEmpty().withMessage('Postal code is required'),
     check('room').notEmpty().withMessage('Room is required'),

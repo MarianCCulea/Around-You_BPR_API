@@ -6,7 +6,7 @@ title: {
     type:String,
     required:true
 },
-descrpition:{
+description:{
     type:String,
     required:true
 },
@@ -19,7 +19,7 @@ floor_no:{
     required:true
 },
 price:{
-    type:String,
+    type: mongoose.Decimal128,
     required:true
 },
 street:{
@@ -28,10 +28,11 @@ street:{
 },
 house_no:{
     type:String,
-    required:true
+    required:false
 },
 door_no:{
-
+    type:String,
+    required:false
 },
 city:{
     type:String,
@@ -43,12 +44,14 @@ postal_code:{
 },
 is_active:{
     type:Boolean,
-    required:true
+    required:true,
+    default:true
 },
-room: {
+room: [{
     type: mongoose.Schema.Types.ObjectId,
+    required:false,
     ref: "room"
-  }
+  }]
 
 },{timestamps:true});
 

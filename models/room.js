@@ -7,7 +7,7 @@ description:{
     required:true
 },
 size:{
-    type:float,
+    type:mongoose.Decimal128,
     required:true
 },
 photo:{
@@ -17,11 +17,11 @@ photo:{
 infoPanel:{
     title:{
         type:String,
-        required:true
+        required:false
     },
     text:{
         type:String,
-        required:true
+        required:false
     }
 }
 },{timestamps:true});

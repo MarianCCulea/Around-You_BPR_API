@@ -1,6 +1,8 @@
-//const mongoose= require('mongoose');
+const mongoose= require('mongoose');
 //const db= require('./models');
 //express app
+//connect to mongodb
+
 
 const express=require('express');
 const rootRouter = require('./routes/index');
@@ -10,9 +12,13 @@ app.use(express.json());
 app.use(rootRouter);
 
 //listen for request
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log( 'Listening on port ${port}...' ));
+// const port = process.env.PORT || 3000;
+// app.listen(port, () => console.log( 'Listening on port ${port}...' ));
 
+const dbURI='mongodb+srv://user1:123abc@bpr.tahew.mongodb.net/BPR_Atlas?retryWrites=true&w=majority'
+mongoose.connect(dbURI,{useNewUrlParser:true,useUnifiedTopology:true})
+.then((result)=>app.listen(3000))
+.catch((err)=>console.log(err));
 
 
 
@@ -46,20 +52,6 @@ app.listen(port, () => console.log( 'Listening on port ${port}...' ));
 //     ]
 //   }
 
-//   exports.listingValidator = () => {
-//     return [
-//       check('title').notEmpty().withMessage('Title or email is required'),
-//       check('descrpition').notEmpty().withMessage('Descrpition is required'),
-//       check('floor').notEmpty().withMessage('floor is required'),
-//       check('floor_no').notEmpty().withMessage('floor_no is required'),
-//       check('price').notEmpty().withMessage('price is required'),
-//       check('street').notEmpty().isEmail().withMessage('street email is required'),
-//       check('house_no').notEmpty().withMessage('house_no is required'),
-//       check('city').notEmpty().withMessage('city is required'),
-//       check('postal_code').notEmpty().withMessage('postal_code is required'),
-//       check('room').notEmpty().withMessage('room is required'),
-//     ]
-//   }
 
 // function validateUser(user){
 //     // const schema={
@@ -79,13 +71,6 @@ app.listen(port, () => console.log( 'Listening on port ${port}...' ));
 //     //     throw new Error('Failed to validate input ' + err.details[0].message);
 //     //   })
 // }
-
-// // const Listing=require('./models/listing')
-// // //connect to mongodb
-// // const dbURI='mongodb+srv://user1:123abc@bpr.tahew.mongodb.net/BPR_Atlas?retryWrites=true&w=majority'
-// // mongoose.connect(dbURI,{useNewUrlParser:true,useUnifiedTopology:true})
-// // .then((result)=>app.listen(3000))
-// // .catch((err)=>console.log(err));
 
 // // app.get('/add-listing',(req,res)=>{
 // //     const listing= new Listing({
@@ -120,13 +105,6 @@ app.listen(port, () => console.log( 'Listening on port ${port}...' ));
 // //         console.log(err);
 // //     });
 // // })
-
-// const courses = [
-// {id:1 , name: 'courses1'},
-// {id:2 , name: 'courses2'},
-// {id:3 , name: 'courses3'},
-// ]
-
 
 // app.get('/' , (req,res)=> {
 // res.send('Hello World!!!!');
