@@ -1,11 +1,27 @@
 const express = require('express');
 const { userValidationRules, roomValidationRules, messageValidationRules, listingValidationRules, validate } = require('../middleware/validator')
 const rootRouter=express.Router();
-const {adaptor}=require('../adaptor')
+const {adaptor}=require('../adaptor');
+const multer=require('multer');
+const upload=multer();
+
+const cpUpload = upload.fields([{ name: 'photo', maxCount: 5 }])
 
 // app.post('/user/all', function(req, res){
 //     Controller.Create
 //   });
+
+rootRouter.post(
+    '/uploadFiles',
+    listingValidationRules(),
+    validate,
+    cpUpload,
+    adaptor.uploadFiles,
+(req,res)=>{
+    return res.send('verynice');
+        //const exist=user.find(email)
+        //if(exist) 
+});
 
 rootRouter.post(
     '/user',

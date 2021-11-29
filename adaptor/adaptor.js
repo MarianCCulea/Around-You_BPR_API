@@ -16,6 +16,9 @@ module.exports = {
             console.error(err);
         }
     },
+    async uploadFiles(res,req,next){
+        
+    },
     async getListingsById(req,res,next){
         try{
             res.send(await listingController.getListingsById(req.body._id));
