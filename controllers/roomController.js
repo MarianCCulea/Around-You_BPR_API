@@ -15,32 +15,26 @@ module.exports = {
             throw new Error(err.body);
         }
     },
-    async updateRoom(listingId, room) {
+    async updateRoom(roomID, room) {
         try {
+            const newRoom = await Room.findByIdAndUpdate(roomID, room, { new: true });
+            return newRoom;
         } catch (err) {
             throw new Error(err.body);
         }
     },
-    async deleteRoom(listingId, room) {
+    async deleteRoom(roomID, room) {
         try {
+            const newRoom = await Room.findByIdAndUpdate(roomID, room, { new: true });
+            return newRoom;
         } catch (err) {
             throw new Error(err.body);
         }
     },
-    async getRoom(listingId, room) {
+    async getRoom(roomID) {
         try {
-        } catch (err) {
-            throw new Error(err.body);
-        }
-    },
-    async updatePanel(listingId, room) {
-        try {
-        } catch (err) {
-            throw new Error(err.body);
-        }
-    },
-    async deletePanel(listingId, room) {
-        try {
+            const room = await Room.findById(roomID).lean();
+            return room;
         } catch (err) {
             throw new Error(err.body);
         }

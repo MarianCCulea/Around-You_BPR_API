@@ -1,7 +1,23 @@
 const {User} = require('../models');
 
 module.exports = {
-    async getAllUsers() {
+    async loginUser() {
+        try {
+            const user = await User.find().populate('user');
+            return user;
+        } catch (err) {
+            throw new Error(err.body);
+        }
+    },
+    async createUser(user) {
+        try {
+            const newUser = await User.create(user);
+            return newUser;
+        } catch (err) {
+            throw new Error(err.body);
+        }
+    },
+    async updateUser() {
         try {
             const user = await User.find().populate('user');
             return user;
@@ -17,14 +33,12 @@ module.exports = {
             throw new Error(err.body);
         }
     },
-
-    async createUser(req) {
+    async getUserByQuery(query) {
         try {
-            const newUser = await User.create(req.body);
-            return newUser;
+            const user= await User.findOne(query);
+            return user;
         } catch (err) {
-            console.log(err);
             throw new Error(err.body);
         }
-    },
+    }
 }

@@ -119,59 +119,14 @@ rootRouter.put("/room/:roomID",
     adaptor.deletePanel);
 
 
-rootRouter.post('/user/login', async (req, res) => {
-    const { rUsername, rPassword } = req.query;
-    if (rUsername == null || rPassword == null) {
-        res.send("Invalid credentials");
-        return;
-    }
 
-    var userAccount = await Account.findOne({ username: rUsername });
-    console.log(userAccount);
-    if (userAccount != null) {
-        if (rPassword == userAccount.password) {
+rootRouter.post('/user/login',
+ adaptor.loginUser);
 
-            userAccount.lastAuthentication = Date.now();
-            await userAccount.save();
-
-            console.log("Retriving account..")
-            res.send(userAccount);
-            return;
-        }
-    }
-
-})
+rootRouter.post('/user/create',  
+userValidationRules(),
+validate,
+adaptor.createUser);
 
 
-rootRouter.post('/user/create', async (req, res) => {
-    const { rUsername, rPassword } = req.query;
-    if (rUsername == null || rPassword == null) {
-        res.send("Invalid credentials");
-        return;
-    }
-
-    var userAccount = await Account.findOne({ username: rUsername });
-    console.log(userAccount);
-    if (userAccount == null) {
-        console.log("Create new account..")
-
-        var newAccount = new Account({
-            username: rUsername,
-            password: rPassword,
-
-            lastAuthentication: Date.now()
-        });
-
-        await newAccount.save();
-
-        res.send(newAccount);
-        return;
-
-    }
-    else {
-
-        res.send("Username is already taken");
-    }
-    return;
-
-});
+module.exports = rootRouter;

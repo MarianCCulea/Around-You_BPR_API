@@ -1,4 +1,4 @@
-const { listingController,roomController } = require('../controllers');
+const { listingController, roomController, userController } = require('../controllers');
 
 module.exports = {
     async createListing(req, res, next) {
@@ -20,8 +20,8 @@ module.exports = {
     },
     async deleteListing(req, res, next) {
         try {
-            const query={is_active:false};
-            await listingController.updateListing(req.body.listingID,query);
+            const query = { is_active: false };
+            await listingController.updateListing(req.body.listingID, query);
         } catch (err) {
             next(err)
         }
@@ -52,7 +52,7 @@ module.exports = {
     },
     async updateRoom(req, res, next) {
         try {
-res.send(roomController.updateRoom(req.params.roomID,req.body));
+            res.send(roomController.updateRoom(req.params.roomID, req.body));
         } catch (err) {
             next(err);
             console.error(err);
@@ -60,7 +60,7 @@ res.send(roomController.updateRoom(req.params.roomID,req.body));
     },
     async deleteRoom(req, res, next) {
         try {
-            res.send(roomController.deleteRoom(req.body.roomID,req.body));
+            res.send(roomController.deleteRoom(req.body.roomID, req.body));
         } catch (err) {
             next(err);
             console.error(err);
@@ -68,7 +68,7 @@ res.send(roomController.updateRoom(req.params.roomID,req.body));
     },
     async getRoom(req, res, next) {
         try {
-            
+
             req.params.roomID
         } catch (err) {
             next(err);
@@ -77,7 +77,7 @@ res.send(roomController.updateRoom(req.params.roomID,req.body));
     },
     async updatePanel(req, res, next) {
         try {
-            
+
             req.params.roomID
         } catch (err) {
             next(err);
@@ -86,11 +86,55 @@ res.send(roomController.updateRoom(req.params.roomID,req.body));
     },
     async deletePanel(req, res, next) {
         try {
-            
+
             req.params.roomID
         } catch (err) {
             next(err);
             console.error(err);
         }
+    },
+    async loginUser(req, res, next) {
+        try {
+            var userAccount = await userController.getUserByQuery(req.body);
+            if (userAccount != null) {
+                    res.send(userAccount);
+            }else{
+                res.send("Wrong username or password.")
+            }
+        } catch (err) {
+            throw new Error(err.body);
+        }
+    },
+    async createUser(req, res, next) {
+        try {
+            var userAccount = await userController.getUserByQuery(req.body);
+            if (userAccount == null) {
+                console.log("Create new account..")
+                res.send(await userController.createUser(req.body));
+            }
+            else {
+                res.send("Username is already taken");
+            }
+        } catch (err) {
+            console.log(err.body);
+           res.send(err);
+        }
+    },
+    async updateUser(req, res, next) {
+        try {
+            const user = await User.find().populate('user');
+            return user;
+        } catch (err) {
+            throw new Error(err.body);
+        }
+    },
+    async getUserById(req, res, next) {
+        try {
+            const user = await User.findById(id).populate({ path: 'user' }).lean();
+            return user;
+        } catch (err) {
+            throw new Error(err.body);
+        }
     }
+
 };

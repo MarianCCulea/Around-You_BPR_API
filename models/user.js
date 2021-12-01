@@ -37,15 +37,18 @@ const userSchema=new Schema({
     },
     is_superuser:{
         type:Boolean,
-        required:true
+        required:false,
+        default:false
     },
     is_agent:{
         type:Boolean,
-        required:true
+        required:false,
+        default:false
     },
     is_active:{
         type:Boolean,
-        required:true
+        required:false,
+        default:true
     }
     
 },{timestamps:true})
