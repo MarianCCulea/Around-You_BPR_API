@@ -1,6 +1,24 @@
-const {Listing,Room} = require('../models');
+const { Listing } = require('../models');
 
 module.exports = {
+    async createListing(listing) {
+        try {
+            const newListing = await Listing.create(listing);
+            return newListing;
+        } catch (err) {
+            console.log(err);
+            throw new Error(err.body);
+        }
+    },
+    async updateListing(listingID,listing) {
+        try {
+            const newListing = await Listing.findByIdAndUpdate(listingID, listing, { new: true });
+            return newListing;
+        } catch (err) {
+            console.log(err);
+            throw new Error(err.body);
+        }
+    },
     async getAllListings() {
         try {
             const listing = await Listing.find().populate('room');
@@ -11,31 +29,8 @@ module.exports = {
     },
     async getListingsById(id) {
         try {
-            const listing= await Listing.findById(id).populate({path: 'room'}).lean();
+            const listing = await Listing.findById(id).populate({ path: 'room' }).lean();
             return listing;
-        } catch (err) {
-            throw new Error(err.body);
-        }
-    },
-    async createListing(req) {
-        try {
-            const newListing = await Listing.create(req.body);
-            return newListing;
-        } catch (err) {
-            console.log(err);
-            throw new Error(err.body);
-        }
-    },
-    async assignRoom(listingId,room) {
-        try {
-            const newRoom = await Room.create(room);
-            const newListing = await Listing.findByIdAndUpdate(
-                listingId,
-                {
-                    $push: { room: newRoom._id }
-                },
-                { new: true, useFindAndModify: false },
-            );
         } catch (err) {
             throw new Error(err.body);
         }

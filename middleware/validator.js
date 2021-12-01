@@ -14,10 +14,10 @@ const userValidationRules = () => {
 
 const roomValidationRules = () => {
   return [
+    check('listingID').notEmpty().withMessage('Listing ID is required'),
     check('description').notEmpty().withMessage('Description is required'),
-    check('size').notEmpty().isInt().withMessage('Size is required'),
+    check('size').notEmpty().isFloat().withMessage('Size is required'),
     check('photo').notEmpty().withMessage('Photo is required'),
-    check('listing_ID').notEmpty().withMessage('Listing_ID is required'),
   ]
 }
 
@@ -41,7 +41,6 @@ const listingValidationRules = () => {
     check('door_no').notEmpty().withMessage('Door number is required'),
     check('city').notEmpty().withMessage('City is required'),
     check('postal_code').notEmpty().withMessage('Postal code is required'),
-    check('room').notEmpty().withMessage('Room is required'),
   ]
 }
 
