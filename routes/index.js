@@ -5,6 +5,9 @@ const {adaptor}=require('../adaptor');
 const multer=require('multer');
 const cloudinary=require('cloudinary').v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({extended: false}))
 
 // const cpUpload = upload.fields([{ name: 'photo', maxCount: 5 }])
 
@@ -103,3 +106,66 @@ rootRouter.post(
         //if(exist) 
 });
 module.exports=rootRouter;
+
+
+app.post('/user/login', async (req, res)=>
+{
+const {rUsername, rPassword} = req.query;
+if(rUsername==null || rPassword ==null)
+{
+res.send ("Invalid credentials");
+return;
+}
+
+var userAccount = await Account.findOne({username:rUsername});
+console.log(userAccount);
+if(userAccount!=null){
+    if(rPassword== userAccount.password){
+
+        userAccount.lastAuthentication=Date.now();
+        await userAccount.save();
+        
+        console.log("Retriving account..")
+        res.send(userAccount);
+        return;
+    }
+}
+
+})
+
+
+app.post('/user/create', async (req, res)=>
+{
+const {rUsername, rPassword} = req.query;
+if(rUsername==null || rPassword ==null)
+{
+res.send ("Invalid credentials");
+return;
+}
+
+var userAccount = await Account.findOne({username:rUsername});
+console.log(userAccount);
+if(userAccount==null)
+{
+console.log("Create new account..")
+
+var newAccount = new Account({
+username:rUsername,
+password:rPassword,
+
+lastAuthentication : Date.now()
+});
+
+await newAccount.save();
+
+res.send(newAccount);
+return;
+
+}
+else{
+    
+    res.send("Username is already taken");
+}
+return;
+
+});
