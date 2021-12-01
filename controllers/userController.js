@@ -1,15 +1,7 @@
 const {User} = require('../models');
 
 module.exports = {
-    async loginUser() {
-        try {
-            const user = await User.find().populate('user');
-            return user;
-        } catch (err) {
-            throw new Error(err.body);
-        }
-    },
-    async createUser(user) {
+     async createUser(user) {
         try {
             const newUser = await User.create(user);
             return newUser;
@@ -17,17 +9,16 @@ module.exports = {
             throw new Error(err.body);
         }
     },
-    async updateUser() {
+    async updateUser(user) {
         try {
-            const user = await User.find().populate('user');
-            return user;
+            //TODO:UPDATE
         } catch (err) {
             throw new Error(err.body);
         }
     },
     async getUserById(id) {
         try {
-            const user= await User.findById(id).populate({path: 'user'}).lean();
+            const user= await User.findById(id).lean();
             return user;
         } catch (err) {
             throw new Error(err.body);
@@ -40,5 +31,12 @@ module.exports = {
         } catch (err) {
             throw new Error(err.body);
         }
-    }
+    },
+    async deleteUser(id) {
+        try {
+ //TODO:DELETE
+        } catch (err) {
+            throw new Error(err.body);
+        }
+    },
 }

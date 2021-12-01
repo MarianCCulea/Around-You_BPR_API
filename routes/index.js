@@ -50,6 +50,8 @@ rootRouter.post(
         //if(exist) 
     });
 
+
+    //listing routes
 rootRouter.post(
     '/listing',
     listingValidationRules(),
@@ -79,6 +81,7 @@ rootRouter.get(
     adaptor.getListingsById);
 
 
+    //room routes
 rootRouter.get("/room",
     //adaptor.getRoom,
     async (req, res) => {
@@ -118,8 +121,7 @@ rootRouter.put("/room/:roomID",
 rootRouter.put("/room/:roomID",
     adaptor.deletePanel);
 
-
-
+//user routes
 rootRouter.post('/user/login',
  adaptor.loginUser);
 
@@ -127,6 +129,17 @@ rootRouter.post('/user/create',
 userValidationRules(),
 validate,
 adaptor.createUser);
+
+rootRouter.put('/user/:userID',  
+userValidationRules(),
+validate,
+adaptor.updateUser);
+
+rootRouter.delete('/user/:userID',  
+//authorisation
+adaptor.deleteUser
+//error middleware
+);
 
 
 module.exports = rootRouter;

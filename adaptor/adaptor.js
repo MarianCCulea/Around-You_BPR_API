@@ -1,6 +1,7 @@
 const { listingController, roomController, userController } = require('../controllers');
 
 module.exports = {
+    //listing methods
     async createListing(req, res, next) {
         try {
             delete req.body.room;
@@ -40,6 +41,7 @@ module.exports = {
             next(err);
         }
     },
+    //room methods
     async assignRoom(req, res, next) {
         try {
             req.body.photo = req.file.path;
@@ -69,7 +71,7 @@ module.exports = {
     async getRoom(req, res, next) {
         try {
 
-            req.params.roomID
+          res.send(await roomController.getRoom(req.params.roomID));
         } catch (err) {
             next(err);
             console.error(err);
@@ -78,7 +80,7 @@ module.exports = {
     async updatePanel(req, res, next) {
         try {
 
-            req.params.roomID
+            await roomController.updateRoomPanel(req.params.roomID,req.body);
         } catch (err) {
             next(err);
             console.error(err);
@@ -87,12 +89,13 @@ module.exports = {
     async deletePanel(req, res, next) {
         try {
 
-            req.params.roomID
+            await roomController.updateRoomPanel(req.params.roomID,req.body);
         } catch (err) {
             next(err);
             console.error(err);
         }
     },
+    //user routes
     async loginUser(req, res, next) {
         try {
             var userAccount = await userController.getUserByQuery(req.body);
@@ -122,7 +125,7 @@ module.exports = {
     },
     async updateUser(req, res, next) {
         try {
-            const user = await User.find().populate('user');
+            const user = await userController.updateUser(req.body);
             return user;
         } catch (err) {
             throw new Error(err.body);
@@ -130,11 +133,19 @@ module.exports = {
     },
     async getUserById(req, res, next) {
         try {
-            const user = await User.findById(id).populate({ path: 'user' }).lean();
+            const user = await userController.getUserById(req.params.userID);
+            res.send(user);
+        } catch (err) {
+            throw new Error(err.body);
+        }
+    },
+    async deleteUser(req, res, next) {
+        try {
+            const user = await userController.deleteUser(req.params.userID);
             return user;
         } catch (err) {
             throw new Error(err.body);
         }
-    }
+    },
 
 };

@@ -38,5 +38,14 @@ module.exports = {
         } catch (err) {
             throw new Error(err.body);
         }
+    },
+    async updateRoomPanel(roomID,panel) {
+        try {
+            // const room = await Room.findById(roomID).lean();
+            // return room;
+        } catch (err) {
+            throw new Error(err.body);
+        }
     }
+    
 };
