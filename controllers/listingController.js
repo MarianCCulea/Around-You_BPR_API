@@ -1,4 +1,3 @@
-const { getListingsById } = require('../adaptor/adaptor');
 const {Listing,Room} = require('../models');
 
 module.exports = {
