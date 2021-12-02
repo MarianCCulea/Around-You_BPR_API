@@ -6,14 +6,14 @@ module.exports = {
             const newUser = await User.create(user);
             return newUser;
         } catch (err) {
-            throw new Error(err.body);
+            throw err;
         }
     },
     async updateUser(user) {
         try {
             //TODO:UPDATE
         } catch (err) {
-            throw new Error(err.body);
+            throw err;
         }
     },
     async getUserById(id) {
@@ -21,7 +21,7 @@ module.exports = {
             const user= await User.findById(id).lean();
             return user;
         } catch (err) {
-            throw new Error(err.body);
+            throw err;
         }
     },
     async getUserByQuery(query) {
@@ -29,14 +29,14 @@ module.exports = {
             const user= await User.findOne(query);
             return user;
         } catch (err) {
-            throw new Error(err.body);
+            throw err;
         }
     },
     async deleteUser(id) {
         try {
  //TODO:DELETE
         } catch (err) {
-            throw new Error(err.body);
+            throw err;
         }
     },
 }

@@ -12,7 +12,7 @@ module.exports = {
                 { new: true, useFindAndModify: false },
             );
         } catch (err) {
-            throw new Error(err.body);
+            throw err;
         }
     },
     async updateRoom(roomID, room) {
@@ -20,7 +20,7 @@ module.exports = {
             const newRoom = await Room.findByIdAndUpdate(roomID, room, { new: true });
             return newRoom;
         } catch (err) {
-            throw new Error(err.body);
+            throw err;
         }
     },
     async deleteRoom(roomID, room) {
@@ -28,7 +28,7 @@ module.exports = {
             const newRoom = await Room.findByIdAndUpdate(roomID, room, { new: true });
             return newRoom;
         } catch (err) {
-            throw new Error(err.body);
+            throw err;
         }
     },
     async getRoom(roomID) {
@@ -36,7 +36,7 @@ module.exports = {
             const room = await Room.findById(roomID).lean();
             return room;
         } catch (err) {
-            throw new Error(err.body);
+            throw err;
         }
     },
     async updateRoomPanel(roomID,panel) {
@@ -44,7 +44,7 @@ module.exports = {
             // const room = await Room.findById(roomID).lean();
             // return room;
         } catch (err) {
-            throw new Error(err.body);
+            throw err;
         }
     }
     

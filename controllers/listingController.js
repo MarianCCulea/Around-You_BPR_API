@@ -7,7 +7,7 @@ module.exports = {
             return newListing;
         } catch (err) {
             console.log(err);
-            throw new Error(err.body);
+            throw err;
         }
     },
     async updateListing(listingID,listing) {
@@ -16,7 +16,7 @@ module.exports = {
             return newListing;
         } catch (err) {
             console.log(err);
-            throw new Error(err.body);
+            throw err;
         }
     },
     async getAllListings() {
@@ -24,7 +24,7 @@ module.exports = {
             const listing = await Listing.find().populate('room');
             return listing;
         } catch (err) {
-            throw new Error(err.body);
+            throw err;
         }
     },
     async getListingsById(id) {
@@ -32,7 +32,7 @@ module.exports = {
             const listing = await Listing.findById(id).populate({ path: 'room' }).lean();
             return listing;
         } catch (err) {
-            throw new Error(err.body);
+            throw err;
         }
     }
 };
