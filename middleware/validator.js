@@ -43,6 +43,13 @@ const listingValidationRules = () => {
   ]
 }
 
+const loginValidationRules = () => {
+  return [
+    check('username').notEmpty().withMessage('Username or email is required'),
+    check('password').notEmpty().withMessage('Password is required')
+  ]
+}
+
 const validate = (req, res, next) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
@@ -61,5 +68,6 @@ module.exports = {
   roomValidationRules,
   messageValidationRules,
   listingValidationRules,
+  loginValidationRules,
   validate,
 }

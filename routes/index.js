@@ -1,5 +1,5 @@
 const express = require('express');
-const { userValidationRules, roomValidationRules, messageValidationRules, listingValidationRules, validate } = require('../middleware/validator')
+const { userValidationRules, roomValidationRules, messageValidationRules, listingValidationRules,loginValidationRules, validate } = require('../middleware/validator')
 const rootRouter = express.Router();
 const { adaptor } = require('../adaptor');
 const multer = require('multer');
@@ -122,7 +122,7 @@ rootRouter.put("/room/:roomID",
     adaptor.deletePanel);
 
 //user routes
-rootRouter.post('/user/login',
+rootRouter.post('/user/login',loginValidationRules,validate,
  adaptor.loginUser);
 
 rootRouter.post('/user/create',  
