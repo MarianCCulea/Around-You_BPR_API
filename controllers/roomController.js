@@ -23,9 +23,9 @@ module.exports = {
             throw err;
         }
     },
-    async deleteRoom(roomID, room) {
+    async deleteRoom(roomID) {
         try {
-            const newRoom = await Room.findByIdAndUpdate(roomID, room, { new: true });
+            Room.deleteOne({ _id:roomID });
             return newRoom;
         } catch (err) {
             throw err;

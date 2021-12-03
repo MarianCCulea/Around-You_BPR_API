@@ -4,7 +4,8 @@ const Schema=mongoose.Schema;
 const userSchema=new Schema({
     username:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     password:{
         type:String,
@@ -50,9 +51,7 @@ const userSchema=new Schema({
         required:false,
         default:true
     }
-    
 },{timestamps:true})
-
 
 const User=mongoose.model('user',userSchema);
 
