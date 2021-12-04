@@ -1,6 +1,6 @@
 module.exports = {
     Listing: require("./listing"),
-    Message: require("./Message"),
-    Room: require("./Room"),
-    User: require("./User")
+    Message: require("./message"),
+    Room: require("./room"),
+    User: require("./user")
   };

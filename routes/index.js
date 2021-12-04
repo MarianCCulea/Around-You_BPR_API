@@ -1,5 +1,5 @@
 const express = require('express');
-const { userValidationRules, roomValidationRules, messageValidationRules, listingValidationRules, validate } = require('../middleware/validator')
+const { userValidationRules, roomValidationRules, messageValidationRules, listingValidationRules,loginValidationRules, validate } = require('../middleware/validator')
 const rootRouter = express.Router();
 const { adaptor } = require('../adaptor');
 const multer = require('multer');
@@ -33,6 +33,16 @@ const upload = multer({ storage: storage });
 rootRouter.post(
     '/user',
     userValidationRules(),
+    validate,
+    (req, res) => {
+        return res.send('verynice');
+        //const exist=user.find(email)
+        //if(exist) 
+    });
+
+rootRouter.post(
+    '/message',
+    messageValidationRules(),
     validate,
     (req, res) => {
         return res.send('verynice');
@@ -112,35 +122,24 @@ rootRouter.put("/room/:roomID",
     adaptor.deletePanel);
 
 //user routes
-rootRouter.post('/user/login',
-    adaptor.loginUser);
+rootRouter.post('/user/login',loginValidationRules,validate,
+ adaptor.loginUser);
 
 rootRouter.post('/user/create',  
-    userValidationRules(),
-    validate,
+userValidationRules(),
+validate,
 adaptor.createUser);
 
 rootRouter.put('/user/:userID',  
-    userValidationRules(),
-    validate,
+userValidationRules(),
+validate,
 adaptor.updateUser);
 
 rootRouter.delete('/user/:userID',  
-    //authorisation
-    adaptor.deleteUser
-    //error middleware
+//authorisation
+adaptor.deleteUser
+//error middleware
 );
 
-rootRouter.post(
-    '/message/:agentName',
-    messageValidationRules(),
-    validate,
-    adaptor.addMessage
-);
-
-rootRouter.get(
-    '/message/:userID',
-    adaptor.getMessages
-);
 
 module.exports = rootRouter;
