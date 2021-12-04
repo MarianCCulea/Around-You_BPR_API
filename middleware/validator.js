@@ -22,9 +22,9 @@ const roomValidationRules = () => {
 
 const messageValidationRules = () => {
   return [
-    check('title').notEmpty().withMessage('Description is required'),
-    check('content').notEmpty().isInt().withMessage('Size is required'),
-    check('sender_ID').notEmpty().withMessage('Photo is required'),
+    check('title').notEmpty().withMessage('Title is required'),
+    check('content').notEmpty().withMessage('Content is required'),
+    check('sender_ID').notEmpty().withMessage('SenderID is required'),
   ]
 }
 

@@ -1,11 +1,13 @@
 const mongoose=require('mongoose');
+const validator = require('validator');
 const Schema=mongoose.Schema;
 
 const userSchema=new Schema({
     username:{
         type:String,
         required:true,
-        unique:true
+        unique:true,
+        validate: [validator.isAlphanumeric, 'Username may only have letters and numbers.']
     },
     password:{
         type:String,
@@ -50,7 +52,12 @@ const userSchema=new Schema({
         type:Boolean,
         required:false,
         default:true
-    }
+    },
+    messages: [{
+        type: mongoose.Schema.Types.ObjectId,
+        required:false,
+        ref: "message"
+      }]
 },{timestamps:true})
 
 const User=mongoose.model('user',userSchema);

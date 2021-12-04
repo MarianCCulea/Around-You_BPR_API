@@ -5,9 +5,8 @@ const Schema=mongoose.Schema;
 const messageSchema=new Schema({
 title:{
     type: String,
-    required: [true, 'Username does not exist.'],
-    lowercase: true,
-    validate: [validator.isAlphanumeric, 'Usernames may only have letters and numbers.']
+    required: true,
+    //validate: [validator.isAlphanumeric, 'Title may only have letters and numbers.']
 },
 content:{
     type:String,

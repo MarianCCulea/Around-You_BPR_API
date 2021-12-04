@@ -40,16 +40,6 @@ rootRouter.post(
         //if(exist) 
     });
 
-rootRouter.post(
-    '/message',
-    messageValidationRules(),
-    validate,
-    (req, res) => {
-        return res.send('verynice');
-        //const exist=user.find(email)
-        //if(exist) 
-    });
-
 
     //listing routes
 rootRouter.post(
@@ -123,23 +113,34 @@ rootRouter.put("/room/:roomID",
 
 //user routes
 rootRouter.post('/user/login',
- adaptor.loginUser);
+    adaptor.loginUser);
 
 rootRouter.post('/user/create',  
-userValidationRules(),
-validate,
+    userValidationRules(),
+    validate,
 adaptor.createUser);
 
 rootRouter.put('/user/:userID',  
-userValidationRules(),
-validate,
+    userValidationRules(),
+    validate,
 adaptor.updateUser);
 
 rootRouter.delete('/user/:userID',  
-//authorisation
-adaptor.deleteUser
-//error middleware
+    //authorisation
+    adaptor.deleteUser
+    //error middleware
 );
 
+rootRouter.post(
+    '/message/:agentName',
+    messageValidationRules(),
+    validate,
+    adaptor.addMessage
+);
+
+rootRouter.get(
+    '/message/:userID',
+    adaptor.getMessages
+);
 
 module.exports = rootRouter;

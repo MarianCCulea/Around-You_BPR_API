@@ -1,4 +1,4 @@
-const { listingController, roomController, userController } = require('../controllers');
+const { listingController, roomController, userController,messageController } = require('../controllers');
 
 module.exports = {
     //listing methods
@@ -126,7 +126,7 @@ module.exports = {
     async updateUser(req, res, next) {
         try {
             const user = await userController.updateUser(req.body);
-            return user;
+            res.send( user);
         } catch (err) {
             throw new Error(err.body);
         }
@@ -141,11 +141,28 @@ module.exports = {
     },
     async deleteUser(req, res, next) {
         try {
-            const user = await userController.deleteUser(req.params.userID);
-            return user;
+            await userController.deleteUser(req.params.userID);
+            res.send("Done");
         } catch (err) {
             throw new Error(err.body);
         }
     },
-
+    //message routes
+    async addMessage(req, res, next) {
+        try {
+            const user = await messageController.createMessage(req.params.agentName,req.body);
+            res.send( user);
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    },
+    async getMessages(req, res, next) {
+        try {
+            const user = await messageController.getAllMessages(req.params.userID);
+            res.send( user);
+        } catch (err) {
+            throw new Error(err.body);
+        }
+    }
 };
