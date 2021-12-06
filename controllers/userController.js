@@ -26,7 +26,7 @@ module.exports = {
     },
     async getUserByQuery(query) {
         try {
-            const user= await User.findOne(query).lean();
+            const user= await User.findOne(query);
             return user;
         } catch (err) {
             throw err;

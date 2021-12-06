@@ -38,15 +38,10 @@ const userSchema=new Schema({
         type:String,
         required:true
     },
-    is_superuser:{
-        type:Boolean,
+    role:{
+        type:String,
         required:false,
-        default:false
-    },
-    is_agent:{
-        type:Boolean,
-        required:false,
-        default:false
+        default:"User"
     },
     is_active:{
         type:Boolean,

@@ -5,9 +5,12 @@ const { adaptor } = require('../adaptor');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+const authorize = require('../auth/auth');
+const Role = require('../auth/role');
 const bodyParser = require('body-parser');
 
-const jwt=require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 rootRouter.use(bodyParser.urlencoded({ extended: false }))
 
@@ -34,35 +37,41 @@ const upload = multer({ storage: storage });
 //listing routes
 rootRouter.post(
     '/listing',
+    authorize([Role.Admin, Role.Agent]),
     listingValidationRules(),
     validate,
     adaptor.createListing);
 
 rootRouter.put(
     '/listing',
+    authorize([Role.Admin, Role.Agent]),
     listingValidationRules(),
     validate,
     adaptor.updateListing);
 
 rootRouter.delete(
     '/listing',
+    authorize([Role.Admin, Role.Agent]),
     listingValidationRules(),
     validate,
     adaptor.deleteListing);
 
 rootRouter.get(
     '/listing',
+    authorize(),
     listingValidationRules(),
     validate,
     adaptor.getAllListings);
 
 rootRouter.get(
     '/listing/:listingID',
+    authorize(),
     adaptor.getListingsById);
 
 
 //room routes
 rootRouter.get("/room",
+    authorize(),
     //adaptor.getRoom,
     async (req, res) => {
         const { resources } = await cloudinary.search
@@ -76,33 +85,42 @@ rootRouter.get("/room",
     });
 
 rootRouter.post("/room",
+    authorize([Role.Admin, Role.Agent]),
     roomValidationRules(),
     validate,
     upload.single('photo'),
     adaptor.assignRoom);
 
 rootRouter.put("/room",
+    authorize([Role.Admin, Role.Agent]),
     roomValidationRules(),
     validate,
     upload.single('photo'),
     adaptor.updateRoom);
 
 rootRouter.delete("/room",
+    authorize([Role.Admin, Role.Agent]),
     roomValidationRules(),
     validate,
     adaptor.deleteRoom);
 
 rootRouter.get("/room/:roomID",
+    authorize(Role.Uer),
     adaptor.getRoom);
 
 rootRouter.put("/room/:roomID",
+    authorize([Role.Admin, Role.Agent]),
     adaptor.updatePanel);
 
 rootRouter.put("/room/:roomID",
+    authorize([Role.Admin, Role.Agent]),
     adaptor.deletePanel);
 
 //user routes
 rootRouter.post('/user/login',
+    authorize(),
+    loginValidationRules(),
+    validate,
     adaptor.loginUser);
 
 rootRouter.post('/user/create',
@@ -110,12 +128,20 @@ rootRouter.post('/user/create',
     validate,
     adaptor.createUser);
 
+rootRouter.post('/user/createAgent',
+    authorize(Role.Admin),
+    userValidationRules(),
+    validate,
+    adaptor.createUser);
+
 rootRouter.put('/user/:userID',
+    authorize([Role.User, Role.Admin]),
     userValidationRules(),
     validate,
     adaptor.updateUser);
 
 rootRouter.delete('/user/:userID',
+    authorize([Role.User, Role.Admin]),
     //authorisation
     adaptor.deleteUser
     //error middleware
@@ -123,12 +149,14 @@ rootRouter.delete('/user/:userID',
 
 rootRouter.post(
     '/message/:agentName',
+    authorize([Role.User, Role.Admin]),
     messageValidationRules(),
     validate,
     adaptor.addMessage);
 
 rootRouter.get(
     '/message/:userID',
+    authorize(Role.Agent),
     adaptor.getMessages);
 
 

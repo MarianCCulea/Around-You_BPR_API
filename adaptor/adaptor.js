@@ -1,5 +1,7 @@
 const { listingController, roomController, userController,messageController } = require('../controllers');
 const bcrypt=require('bcryptjs');
+require('dotenv').config();
+const jwt=require('jsonwebtoken');
 
 module.exports = {
     //listing methods
@@ -71,7 +73,6 @@ module.exports = {
     },
     async getRoom(req, res, next) {
         try {
-
           res.send(await roomController.getRoom(req.params.roomID));
         } catch (err) {
             next(err);
@@ -102,12 +103,17 @@ module.exports = {
             var userAccount = await userController.getUserByQuery({username:req.body.username});
             const validPass = await bcrypt.compare(req.body.password,userAccount.password);
             if (validPass) {
+                //token
+                const token = jwt.sign({ sub: userAccount.id, role: userAccount.role }, process.env.ACCESS_TOKEN_SECRET);
+                delete userAccount.password;
+                console.log(token);
+                userAccount.token=token;
                     res.send(userAccount);
             }else{
                 res.send("Wrong username or password.")
             }
         } catch (err) {
-            throw new Error(err.body);
+            console.error(err);
         }
     },
     async createUser(req, res, next) {
