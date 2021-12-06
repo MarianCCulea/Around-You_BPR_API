@@ -1,4 +1,5 @@
 const { listingController, roomController, userController,messageController } = require('../controllers');
+const bcrypt=require('bcryptjs');
 
 module.exports = {
     //listing methods
@@ -98,8 +99,9 @@ module.exports = {
     //user routes
     async loginUser(req, res, next) {
         try {
-            var userAccount = await userController.getUserByQuery(req.body);
-            if (userAccount != null) {
+            var userAccount = await userController.getUserByQuery({username:req.body.username});
+            const validPass = await bcrypt.compare(req.body.password,userAccount.password);
+            if (validPass) {
                     res.send(userAccount);
             }else{
                 res.send("Wrong username or password.")
@@ -113,6 +115,8 @@ module.exports = {
             var userAccount = await userController.getUserByQuery(req.body);
             if (userAccount == null) {
                 console.log("Create new account..")
+                const salt=await bcrypt.genSalt(10);
+                req.body.password=await bcrypt.hash(req.body.password,salt);
                 res.send(await userController.createUser(req.body));
             }
             else {
@@ -151,18 +155,17 @@ module.exports = {
     async addMessage(req, res, next) {
         try {
             const user = await messageController.createMessage(req.params.agentName,req.body);
-            res.send( user);
+            res.send(user);
         } catch (err) {
-            console.error(err);
             throw err;
         }
     },
     async getMessages(req, res, next) {
         try {
-            const user = await messageController.getAllMessages(req.params.userID);
-            res.send( user);
+            const msg = await messageController.getAllMessages(req.params.userID);
+            res.send(msg);
         } catch (err) {
-            throw new Error(err.body);
+            throw err;
         }
     }
 };

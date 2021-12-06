@@ -5,12 +5,10 @@ module.exports = {
         try {
             const newMessage = await Message.create(message);
             const agent =await User.findOne({username:agentName,is_agent:true});
-            console.log(agent._id);
-            /////////bug
             await User.findByIdAndUpdate(
-                agent._id,
+                agent.id,
                 {
-                    $push: { message: newMessage._id }
+                    $push: { messages: newMessage.id }
                 },
                 { new: true, useFindAndModify: false },
             );
@@ -21,8 +19,8 @@ module.exports = {
     },
     async getAllMessages(userId) {
         try {
-            const listing = await User.find({_id:userId,is_agent:true}).populate('message');
-            return listing.message;
+            const user = await User.findOne({id:userId,is_agent:true}).populate({ path: 'messages' }).lean();
+            return user.messages;
         } catch (err) {
             throw err;
         }

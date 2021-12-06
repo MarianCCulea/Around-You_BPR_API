@@ -1,11 +1,13 @@
 const express = require('express');
-const { userValidationRules, roomValidationRules, messageValidationRules, listingValidationRules,loginValidationRules, validate } = require('../middleware/validator')
+const { userValidationRules, roomValidationRules, messageValidationRules, listingValidationRules, loginValidationRules, validate } = require('../middleware/validator')
 const rootRouter = express.Router();
 const { adaptor } = require('../adaptor');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const bodyParser = require('body-parser');
+
+const jwt=require('jsonwebtoken');
 
 rootRouter.use(bodyParser.urlencoded({ extended: false }))
 
@@ -27,31 +29,9 @@ const storage = new CloudinaryStorage({
 //multer cloudinary setup
 const upload = multer({ storage: storage });
 
-
 //routes--------
 
-rootRouter.post(
-    '/user',
-    userValidationRules(),
-    validate,
-    (req, res) => {
-        return res.send('verynice');
-        //const exist=user.find(email)
-        //if(exist) 
-    });
-
-rootRouter.post(
-    '/message',
-    messageValidationRules(),
-    validate,
-    (req, res) => {
-        return res.send('verynice');
-        //const exist=user.find(email)
-        //if(exist) 
-    });
-
-
-    //listing routes
+//listing routes
 rootRouter.post(
     '/listing',
     listingValidationRules(),
@@ -81,7 +61,7 @@ rootRouter.get(
     adaptor.getListingsById);
 
 
-    //room routes
+//room routes
 rootRouter.get("/room",
     //adaptor.getRoom,
     async (req, res) => {
@@ -122,24 +102,34 @@ rootRouter.put("/room/:roomID",
     adaptor.deletePanel);
 
 //user routes
-rootRouter.post('/user/login',loginValidationRules,validate,
- adaptor.loginUser);
+rootRouter.post('/user/login',
+    adaptor.loginUser);
 
-rootRouter.post('/user/create',  
-userValidationRules(),
-validate,
-adaptor.createUser);
+rootRouter.post('/user/create',
+    userValidationRules(),
+    validate,
+    adaptor.createUser);
 
-rootRouter.put('/user/:userID',  
-userValidationRules(),
-validate,
-adaptor.updateUser);
+rootRouter.put('/user/:userID',
+    userValidationRules(),
+    validate,
+    adaptor.updateUser);
 
-rootRouter.delete('/user/:userID',  
-//authorisation
-adaptor.deleteUser
-//error middleware
+rootRouter.delete('/user/:userID',
+    //authorisation
+    adaptor.deleteUser
+    //error middleware
 );
+
+rootRouter.post(
+    '/message/:agentName',
+    messageValidationRules(),
+    validate,
+    adaptor.addMessage);
+
+rootRouter.get(
+    '/message/:userID',
+    adaptor.getMessages);
 
 
 module.exports = rootRouter;
