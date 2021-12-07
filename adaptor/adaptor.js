@@ -104,7 +104,7 @@ module.exports = {
             const validPass = await bcrypt.compare(req.body.password,userAccount.password);
             if (validPass) {
                 //token
-                const token = jwt.sign({ sub: userAccount.id, role: userAccount.role }, process.env.ACCESS_TOKEN_SECRET);
+                const token = jwt.sign({ sub: userAccount._id, role: userAccount.role }, process.env.ACCESS_TOKEN_SECRET);
                 delete userAccount.password;
                 console.log(token);
                 userAccount.token=token;
@@ -117,6 +117,23 @@ module.exports = {
         }
     },
     async createUser(req, res, next) {
+        try {
+            var userAccount = await userController.getUserByQuery(req.body);
+            if (userAccount == null) {
+                console.log("Create new account..")
+                const salt=await bcrypt.genSalt(10);
+                req.body.password=await bcrypt.hash(req.body.password,salt);
+                res.send(await userController.createUser(req.body));
+            }
+            else {
+                res.send("Username is already taken");
+            }
+        } catch (err) {
+            console.log(err.body);
+           res.send(err);
+        }
+    },
+    async createAdmin(req, res, next) {
         try {
             var userAccount = await userController.getUserByQuery(req.body);
             if (userAccount == null) {

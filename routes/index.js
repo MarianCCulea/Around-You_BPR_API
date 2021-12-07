@@ -1,5 +1,8 @@
 const express = require('express');
-const { userValidationRules, roomValidationRules, messageValidationRules, listingValidationRules, loginValidationRules, validate } = require('../middleware/validator')
+const { userValidationRules, roomValidationRules, 
+    messageValidationRules, listingValidationRules, 
+    loginValidationRules,agentValidationRules, 
+    validate } = require('../middleware/validator')
 const rootRouter = express.Router();
 const { adaptor } = require('../adaptor');
 const multer = require('multer');
@@ -7,7 +10,7 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const authorize = require('../auth/auth');
-const Role = require('../auth/role');
+const Role = require('../auth/role.js');
 const bodyParser = require('body-parser');
 
 const jwt = require('jsonwebtoken');
@@ -35,6 +38,13 @@ const upload = multer({ storage: storage });
 //routes--------
 
 //listing routes
+
+rootRouter.get(
+    '/test',(req,res)=>{
+        res.send(Role.Admin+Role.Agent);
+    });
+
+
 rootRouter.post(
     '/listing',
     authorize([Role.Admin, Role.Agent]),
@@ -118,7 +128,6 @@ rootRouter.put("/room/:roomID",
 
 //user routes
 rootRouter.post('/user/login',
-    authorize(),
     loginValidationRules(),
     validate,
     adaptor.loginUser);
@@ -128,11 +137,11 @@ rootRouter.post('/user/create',
     validate,
     adaptor.createUser);
 
-rootRouter.post('/user/createAgent',
+rootRouter.post('/user/createAdmin',
     authorize(Role.Admin),
-    userValidationRules(),
+    adminValidationRules(),
     validate,
-    adaptor.createUser);
+    adaptor.createAdmin);
 
 rootRouter.put('/user/:userID',
     authorize([Role.User, Role.Admin]),
