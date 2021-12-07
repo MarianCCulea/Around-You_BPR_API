@@ -11,7 +11,8 @@ module.exports = {
     },
     async updateUser(user) {
         try {
-            //TODO:UPDATE
+            const newUser = await User.findByIdAndUpdate(user._id, user, { new: true });
+            return newUser;
         } catch (err) {
             throw err;
         }
@@ -34,7 +35,8 @@ module.exports = {
     },
     async deleteUser(id) {
         try {
- //TODO:DELETE
+            const newUser = await User.findByIdAndUpdate(id, {is_active:false}, { new: true });
+            return newUser;
         } catch (err) {
             throw err;
         }

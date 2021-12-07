@@ -12,6 +12,25 @@ const userValidationRules = () => {
   ]
 }
 
+const userUpdateValidationRules = () => {
+  return [
+    check('_id').notEmpty().withMessage('Id is required'),
+    check('username').notEmpty().withMessage('Username is required'),
+    check('password').notEmpty().withMessage('Password is required'),
+    check('first_name').notEmpty().withMessage('First_name is required'),
+    check('last_name').notEmpty().withMessage('Last_name is required'),
+    check('email').notEmpty().isEmail().toLowerCase().withMessage('Valid email is required'),
+    check('phone').notEmpty().withMessage('Phone is required'),
+    check('sex').notEmpty().withMessage('Sex is required'),
+    check('role').isEmpty().withMessage('Not allowed to specify role'),
+  ]
+}
+
+const userUpdateAdminValidationRules = () => {
+  return [
+    check('_id').notEmpty().withMessage('Id is required'),
+  ]
+}
 
 const adminValidationRules = () => {
   return [
@@ -46,15 +65,20 @@ const messageValidationRules = () => {
 const listingValidationRules = () => {
   return [
     check('title').notEmpty().withMessage('Title is required'),
-    check('description').notEmpty().withMessage('Description is required'),
-    check('floor').notEmpty().withMessage('Floor is required'),
-    check('floor_no').notEmpty().withMessage('Floor number is required'),
-    check('price').notEmpty().withMessage('Price is required'),
     check('street').notEmpty().withMessage('Street is required'),
-    check('house_no').notEmpty().withMessage('House number is required'),
-    check('door_no').notEmpty().withMessage('Door number is required'),
-    check('city').notEmpty().withMessage('City is required'),
-    check('postal_code').notEmpty().withMessage('Postal code is required'),
+    check('city').notEmpty().withMessage('Floor is required'),
+    check('house_no').notEmpty().withMessage('Floor number is required'),
+    check('postal_code').notEmpty().withMessage('Price is required'),
+    check('year_of_construction').notEmpty().withMessage('Street is required'),
+    check('living_space').notEmpty().withMessage('House number is required'),
+    check('no_of_floors').notEmpty().withMessage('Door number is required'),
+    check('price').notEmpty().withMessage('City is required'),
+    check('groud_size').notEmpty().withMessage('Postal code is required'),
+    check('thumbnail').notEmpty().withMessage('Floor number is required'),
+    check('description').notEmpty().withMessage('Price is required'),
+    check('property_type').notEmpty().withMessage('Street is required'),
+    check('agentID').isEmpty().withMessage('Not allowed to specify agent ID'),
+    check('measure_time_on_market').isEmpty().withMessage('Not allowed to specify time on market')
   ]
 }
 
@@ -85,5 +109,7 @@ module.exports = {
   listingValidationRules,
   loginValidationRules,
   adminValidationRules,
+  userUpdateValidationRules,
+  userUpdateAdminValidationRules,
   validate,
 }

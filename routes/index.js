@@ -1,7 +1,8 @@
 const express = require('express');
-const { userValidationRules, roomValidationRules, 
-    messageValidationRules, listingValidationRules, 
-    loginValidationRules,agentValidationRules, 
+const { userValidationRules, roomValidationRules,
+    messageValidationRules, listingValidationRules,
+    loginValidationRules, adminValidationRules, userUpdateValidationRules,
+    userUpdateAdminValidationRules,
     validate } = require('../middleware/validator')
 const rootRouter = express.Router();
 const { adaptor } = require('../adaptor');
@@ -9,7 +10,7 @@ const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-const authorize = require('../auth/auth');
+const authorize = require('../auth/auth.js');
 const Role = require('../auth/role.js');
 const bodyParser = require('body-parser');
 
@@ -40,8 +41,8 @@ const upload = multer({ storage: storage });
 //listing routes
 
 rootRouter.get(
-    '/test',(req,res)=>{
-        res.send(Role.Admin+Role.Agent);
+    '/test', (req, res) => {
+        res.send(Role.Admin + Role.Agent);
     });
 
 
@@ -68,20 +69,17 @@ rootRouter.delete(
 
 rootRouter.get(
     '/listing',
-    authorize(),
     listingValidationRules(),
     validate,
     adaptor.getAllListings);
 
 rootRouter.get(
     '/listing/:listingID',
-    authorize(),
     adaptor.getListingsById);
 
 
 //room routes
 rootRouter.get("/room",
-    authorize(),
     //adaptor.getRoom,
     async (req, res) => {
         const { resources } = await cloudinary.search
@@ -137,21 +135,14 @@ rootRouter.post('/user/create',
     validate,
     adaptor.createUser);
 
-rootRouter.post('/user/createAdmin',
-    authorize(Role.Admin),
-    adminValidationRules(),
-    validate,
-    adaptor.createAdmin);
-
-rootRouter.put('/user/:userID',
-    authorize([Role.User, Role.Admin]),
-    userValidationRules(),
+rootRouter.put('/user',
+    authorize(),
+    userUpdateValidationRules(),
     validate,
     adaptor.updateUser);
 
 rootRouter.delete('/user/:userID',
-    authorize([Role.User, Role.Admin]),
-    //authorisation
+    authorize(),
     adaptor.deleteUser
     //error middleware
 );
@@ -168,5 +159,18 @@ rootRouter.get(
     authorize(Role.Agent),
     adaptor.getMessages);
 
+//ADMIN routes
+
+rootRouter.post('/admin/user',
+    authorize(Role.Admin),
+    adminValidationRules(),
+    validate,
+    adaptor.createUser);
+
+rootRouter.put('/admin/user',
+    authorize([Role.Admin]),
+    userUpdateAdminValidationRules(),
+    validate,
+    adaptor.updateUser);
 
 module.exports = rootRouter;
