@@ -7,6 +7,12 @@ module.exports = {
     //listing methods
     async createListing(req, res, next) {
         try {
+            const authHeader = req.headers['authorization'];
+            const token = authHeader && authHeader.split(' ')[1];
+            if (token == null) return res.sendStatus(401);
+            jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
+                req.body['agentID']=payload.sub;
+                });
             delete req.body.room;
             const oldListing = await listingController.createListing(req.body);
             res.send(await listingController.getListingsById(oldListing._id));
@@ -17,7 +23,16 @@ module.exports = {
     },
     async updateListing(req, res, next) {
         try {
-            res.send(await listingController.updateListing(req.body));
+            const listing = await listingController.getListingsById(req.body._id);
+            const authHeader = req.headers['authorization'];
+            const token = authHeader && authHeader.split(' ')[1];
+            if (token == null) return res.sendStatus(401);
+            jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
+                if(payload.sub==listing.agentID){
+                    res.send(await listingController.updateListing(req.body));
+                }
+                else res.send("Not authorized to update this listing");
+            });            
         } catch (err) {
             res.send(err);
         }
@@ -25,14 +40,14 @@ module.exports = {
     async deleteListing(req, res, next) {
         try {
             const query = { is_active: false };
-            await listingController.updateListing(req.body.listingID, query);
+            await listingController.updateListing(req.params.listingID, query);
         } catch (err) {
             next(err)
         }
     },
     async getAllListings(req, res, next) {
         try {
-            res.send(listingController.getAllListings());
+            res.send(listingController.getAllListings(10));
         } catch (err) {
             next(err);
         }
@@ -46,10 +61,19 @@ module.exports = {
     },
     //room methods
     async assignRoom(req, res, next) {
-        try {
-            req.body.photo = req.file.path;
-            await roomController.assignRoom(req.body.listingID, req.body);
-            res.send(await listingController.getListingsById(req.body.listingID));
+        try {//revise
+            const listing = await listingController.getListingsById(req.body.listingID);
+            const authHeader = req.headers['authorization'];
+            const token = authHeader && authHeader.split(' ')[1];
+            if (token == null) return res.sendStatus(401);
+            jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
+                if(payload.sub==listing.agentID){
+                    req.body.photo = req.file.path;
+                    await roomController.assignRoom(req.body.listingID, req.body);
+                    res.send(await listingController.getListingsById(req.body.listingID));
+                }
+                else res.send("Not authorized to update this listing");
+            });
         } catch (err) {
             next(err);
             console.error(err);
@@ -57,7 +81,17 @@ module.exports = {
     },
     async updateRoom(req, res, next) {
         try {
-            res.send(roomController.updateRoom(req.params.roomID, req.body));
+            const listing = await listingController.getListingsByQuery(req.body.roomID);
+            const authHeader = req.headers['authorization'];
+            const token = authHeader && authHeader.split(' ')[1];
+            if (token == null) return res.sendStatus(401);
+            jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
+                if(payload.sub==listing.agentID){
+                   const newRoom=await roomController.updateRoom(req.body._id, req.body)
+                    res.send(newRoom);
+                }
+                else res.send("Not authorized to update this listing");
+            });
         } catch (err) {
             next(err);
             console.error(err);
@@ -74,24 +108,6 @@ module.exports = {
     async getRoom(req, res, next) {
         try {
             res.send(await roomController.getRoom(req.params.roomID));
-        } catch (err) {
-            next(err);
-            console.error(err);
-        }
-    },
-    async updatePanel(req, res, next) {
-        try {
-
-            await roomController.updateRoomPanel(req.params.roomID, req.body);
-        } catch (err) {
-            next(err);
-            console.error(err);
-        }
-    },
-    async deletePanel(req, res, next) {
-        try {
-
-            await roomController.updateRoomPanel(req.params.roomID, req.body);
         } catch (err) {
             next(err);
             console.error(err);
@@ -120,12 +136,13 @@ module.exports = {
     },
     async createUser(req, res, next) {
         try {
-            ///////////////////////////////revise
             var userAccount = await userController.getUserByQuery(req.body);
             if (userAccount == null) {
                 const salt = await bcrypt.genSalt(10);
                 req.body.password = await bcrypt.hash(req.body.password, salt);
-                res.send(await userController.createUser(req.body));
+                req.body.profile_image = req.file.path;
+                const acc=await userController.createUser(req.body)
+                res.send(acc);
             }
             else {
                 res.send("Username is already taken");

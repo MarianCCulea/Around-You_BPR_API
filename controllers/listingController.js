@@ -19,9 +19,9 @@ module.exports = {
             throw err;
         }
     },
-    async getAllListings() {
+    async getAllListings(nr) {
         try {
-            const listing = await Listing.find().populate('room');
+            const listing = await Listing.find().populate('room').limit(nr);
             return listing;
         } catch (err) {
             throw err;
@@ -30,6 +30,15 @@ module.exports = {
     async getListingsById(id) {
         try {
             const listing = await Listing.findById(id).populate({ path: 'room' }).lean();
+            return listing;
+        } catch (err) {
+            throw err;
+        }
+    },
+    async getListingsByQuery(id) {
+        try {
+            
+            const listing = await Listing.find({ 'room': { '_id': id } }).lean();
             return listing;
         } catch (err) {
             throw err;

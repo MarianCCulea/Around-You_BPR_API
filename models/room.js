@@ -2,27 +2,13 @@ const mongoose=require('mongoose');
 const Schema=mongoose.Schema;
 
 const roomSchema=new Schema({
-description:{
+    infoPanel:{
     type:String,
-    required:true
-},
-size:{
-    type:mongoose.Decimal128,
     required:true
 },
 photo:{
     type:String,
     required:true
-},
-infoPanel:{
-    title:{
-        type:String,
-        required:false
-    },
-    text:{
-        type:String,
-        required:false
-    }
 }
 },{timestamps:true});
 

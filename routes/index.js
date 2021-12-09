@@ -40,9 +40,10 @@ const upload = multer({ storage: storage });
 
 //listing routes
 
-rootRouter.get(
+rootRouter.put(
     '/test', (req, res) => {
-        res.send(Role.Admin + Role.Agent);
+        console.log(req);
+        res.send(req.body);
     });
 
 
@@ -61,16 +62,12 @@ rootRouter.put(
     adaptor.updateListing);
 
 rootRouter.delete(
-    '/listing',
+    '/listing/:listingID',
     authorize([Role.Admin, Role.Agent]),
-    listingValidationRules(),
-    validate,
     adaptor.deleteListing);
 
 rootRouter.get(
     '/listing',
-    listingValidationRules(),
-    validate,
     adaptor.getAllListings);
 
 rootRouter.get(
@@ -79,6 +76,7 @@ rootRouter.get(
 
 
 //room routes
+////???????????
 rootRouter.get("/room",
     //adaptor.getRoom,
     async (req, res) => {
@@ -113,21 +111,19 @@ rootRouter.delete("/room",
     adaptor.deleteRoom);
 
 rootRouter.get("/room/:roomID",
-    authorize(Role.Uer),
+    authorize(Role.User),
     adaptor.getRoom);
 
-rootRouter.put("/room/:roomID",
-    authorize([Role.Admin, Role.Agent]),
-    adaptor.updatePanel);
-
-rootRouter.put("/room/:roomID",
-    authorize([Role.Admin, Role.Agent]),
-    adaptor.deletePanel);
+    rootRouter.get("/room/listing/:listingID",
+    authorize(Role.User),
+    adaptor.getRoom);
 
 //user routes
 rootRouter.post('/user/login',
+
     loginValidationRules(),
     validate,
+    upload.single('profile_image'),
     adaptor.loginUser);
 
 rootRouter.post('/user/create',

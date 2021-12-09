@@ -42,7 +42,7 @@ groud_size:{
     type:Number,
     required:true
 },
-enerhy_level:{
+energy_level:{
     type:Number,
     required:true
 },

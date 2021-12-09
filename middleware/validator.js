@@ -48,8 +48,7 @@ const adminValidationRules = () => {
 const roomValidationRules = () => {
   return [
     check('listingID').notEmpty().withMessage('Listing ID is required'),
-    check('description').notEmpty().withMessage('Description is required'),
-    check('size').notEmpty().isFloat().withMessage('Size is required'),
+    check('infoPanel').notEmpty().withMessage('infoPanel is required'),
     check('photo').notEmpty().withMessage('Photo is required'),
   ]
 }
@@ -74,11 +73,13 @@ const listingValidationRules = () => {
     check('no_of_floors').notEmpty().withMessage('Door number is required'),
     check('price').notEmpty().withMessage('City is required'),
     check('groud_size').notEmpty().withMessage('Postal code is required'),
+    check('energy_level').notEmpty().withMessage('Postal code is required'),
     check('thumbnail').notEmpty().withMessage('Floor number is required'),
-    check('description').notEmpty().withMessage('Price is required'),
+    check('description').notEmpty().withMessage('Description is required'),
     check('property_type').notEmpty().withMessage('Street is required'),
     check('agentID').isEmpty().withMessage('Not allowed to specify agent ID'),
-    check('measure_time_on_market').isEmpty().withMessage('Not allowed to specify time on market')
+    check('measure_time_on_market').isEmpty().withMessage('Not allowed to specify time on market'),
+    check('room').isEmpty().withMessage('Not allowed to specify time on market'),
   ]
 }
 
