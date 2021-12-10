@@ -16,7 +16,7 @@ const bodyParser = require('body-parser');
 
 const jwt = require('jsonwebtoken');
 
-rootRouter.use(bodyParser.urlencoded({ extended: false }))
+rootRouter.use(bodyParser.urlencoded({ extended: true }))
 
 //cloudinary config
 cloudinary.config({
@@ -34,15 +34,18 @@ const storage = new CloudinaryStorage({
 });
 
 //multer cloudinary setup
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage, limits: { fileSize: 51100000 } });
 
 //routes--------
 
 //listing routes
 
-rootRouter.put(
-    '/test', (req, res) => {
-        console.log(req);
+rootRouter.post(
+    '/test', authorize([Role.Admin, Role.Agent]),
+    upload.single('thumbnail'),
+    listingValidationRules(),
+    validate, (req, res) => {
+        console.log(req.body);
         res.send(req.body);
     });
 
@@ -50,9 +53,18 @@ rootRouter.put(
 rootRouter.post(
     '/listing',
     authorize([Role.Admin, Role.Agent]),
+    upload.single('thumbnail'),
     listingValidationRules(),
     validate,
     adaptor.createListing);
+
+rootRouter.post(
+    '/listing/:listingID',
+    authorize([Role.Admin, Role.Agent]),
+    upload.single('thumbnail'),
+    listingValidationRules(),
+    validate,
+    adaptor.uploadListingPhoto);
 
 rootRouter.put(
     '/listing',
@@ -90,18 +102,18 @@ rootRouter.get("/room",
         res.send(publicIds);
     });
 
-rootRouter.post("/room",
+rootRouter.post("/room/:listingID",
     authorize([Role.Admin, Role.Agent]),
+    upload.single('image'),
     roomValidationRules(),
     validate,
-    upload.single('photo'),
     adaptor.assignRoom);
 
 rootRouter.put("/room",
     authorize([Role.Admin, Role.Agent]),
+    upload.single('photo'),
     roomValidationRules(),
     validate,
-    upload.single('photo'),
     adaptor.updateRoom);
 
 rootRouter.delete("/room",
@@ -111,19 +123,18 @@ rootRouter.delete("/room",
     adaptor.deleteRoom);
 
 rootRouter.get("/room/:roomID",
-    authorize(Role.User),
+    authorize(),
     adaptor.getRoom);
 
-    rootRouter.get("/room/listing/:listingID",
-    authorize(Role.User),
-    adaptor.getRoom);
+rootRouter.get("/room/listing/:listingID",
+    authorize(),
+    adaptor.getRooms);
 
 //user routes
 rootRouter.post('/user/login',
-
+    upload.single('profile_image'),
     loginValidationRules(),
     validate,
-    upload.single('profile_image'),
     adaptor.loginUser);
 
 rootRouter.post('/user/create',

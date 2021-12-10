@@ -49,7 +49,7 @@ const roomValidationRules = () => {
   return [
     check('listingID').notEmpty().withMessage('Listing ID is required'),
     check('infoPanel').notEmpty().withMessage('infoPanel is required'),
-    check('photo').notEmpty().withMessage('Photo is required'),
+    check('photo').notEmpty().withMessage('infoPanel is required'),
   ]
 }
 
@@ -72,9 +72,8 @@ const listingValidationRules = () => {
     check('living_space').notEmpty().withMessage('House number is required'),
     check('no_of_floors').notEmpty().withMessage('Door number is required'),
     check('price').notEmpty().withMessage('City is required'),
-    check('groud_size').notEmpty().withMessage('Postal code is required'),
+    check('ground_size').notEmpty().withMessage('Postal code is required'),
     check('energy_level').notEmpty().withMessage('Postal code is required'),
-    check('thumbnail').notEmpty().withMessage('Floor number is required'),
     check('description').notEmpty().withMessage('Description is required'),
     check('property_type').notEmpty().withMessage('Street is required'),
     check('agentID').isEmpty().withMessage('Not allowed to specify agent ID'),

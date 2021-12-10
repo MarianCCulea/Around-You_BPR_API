@@ -38,7 +38,7 @@ price:{
     type:Number,
     required:false
 },
-groud_size:{
+ground_size:{
     type:Number,
     required:true
 },
