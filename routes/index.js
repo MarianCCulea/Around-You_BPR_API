@@ -132,12 +132,12 @@ rootRouter.get("/room/listing/:listingID",
 
 //user routes
 rootRouter.post('/user/login',
-    upload.single('profile_image'),
     loginValidationRules(),
     validate,
     adaptor.loginUser);
 
 rootRouter.post('/user/create',
+// upload.single('profile_image'),
     userValidationRules(),
     validate,
     adaptor.createUser);

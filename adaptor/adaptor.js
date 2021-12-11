@@ -147,6 +147,7 @@ module.exports = {
     async loginUser(req, res, next) {
         try {
             var userAccount = await userController.getUserByQuery({ username: req.body.username });
+            if(!userAccount) return res.send("UserNo exist");
             if(!userAccount.is_active) res.send('Account is inactive');
             const validPass = await bcrypt.compare(req.body.password, userAccount.password);
             if (validPass) {
@@ -166,19 +167,19 @@ module.exports = {
     },
     async createUser(req, res, next) {
         try {
-            var userAccount = await userController.getUserByQuery(req.body);
+            var userAccount = await userController.getUserByQuery({username:req.body.username});
             if (userAccount == null) {
                 const salt = await bcrypt.genSalt(10);
                 req.body.password = await bcrypt.hash(req.body.password, salt);
-                req.body.profile_image = req.file.path;
+                //req.body.profile_image = req.file.path;
                 const acc=await userController.createUser(req.body)
                 res.send(acc);
             }
             else {
-                res.send("Username is already taken");
+                res.sendStatus(402).send("Username is already taken");
             }
         } catch (err) {
-            res.send(err);
+            res.sendStatus(401).send(err);
         }
     },
     async updateUser(req, res, next) {
