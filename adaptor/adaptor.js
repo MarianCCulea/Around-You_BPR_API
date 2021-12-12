@@ -64,7 +64,14 @@ module.exports = {
     },
     async getAllListings(req, res, next) {
         try {
-            res.send(listingController.getAllListings(10));
+            res.send(listingController.getAllListings());
+        } catch (err) {
+            next(err);
+        }
+    },
+    async getLimitedListings(req, res, next) {
+        try {
+            res.send(listingController.getLimitedListings(req.params.page));
         } catch (err) {
             next(err);
         }

@@ -19,9 +19,17 @@ module.exports = {
             throw err;
         }
     },
-    async getAllListings(nr) {
+    async getAllListings() {
         try {
-            const listing = await Listing.find().populate('room').limit(nr);
+            const listing = await Listing.find().populate('room').limit();
+            return listing;
+        } catch (err) {
+            throw err;
+        }
+    },
+    async getLimitedListings(nr) {
+        try {
+            const listing = await Listing.find().skip(nr).limit(5).populate('room').limit();
             return listing;
         } catch (err) {
             throw err;

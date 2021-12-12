@@ -79,7 +79,7 @@ rootRouter.delete(
     adaptor.deleteListing);
 
 rootRouter.get(
-    '/listing',
+    '/listing:page',
     adaptor.getAllListings);
 
 rootRouter.get(
@@ -127,7 +127,7 @@ rootRouter.get("/room/:roomID",
     adaptor.getRoom);
 
 rootRouter.get("/room/listing/:listingID",
-    authorize(),
+    //authorize(),
     adaptor.getRooms);
 
 //user routes

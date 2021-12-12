@@ -39,6 +39,14 @@ module.exports = {
             throw err;
         }
     },
+    async getRooms() {
+        try {
+            const room = await Room.find().skip(2).limit(2).lean();
+            return room;
+        } catch (err) {
+            throw err;
+        }
+    },
     async updateRoomPanel(roomID,panel) {
         try {
             // const room = await Room.findById(roomID).lean();
