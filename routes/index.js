@@ -86,7 +86,6 @@ rootRouter.get(
     '/listing/:listingID',
     adaptor.getListingsById);
 
-
 //room routes
 ////???????????
 rootRouter.get("/room",
