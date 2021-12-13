@@ -85,23 +85,19 @@ module.exports = {
     },
     //room methods
     async assignRoom(req, res, next) {
-        try {//revise
-            req.body.photo = req.file.path;
-            await roomController.assignRoom(req.params.listingID, req.body);
-             res.send("muie");
-
-            // const listing = await listingController.getListingsById(req.body.listingID);
-            // const authHeader = req.headers['authorization'];
-            // const token = authHeader && authHeader.split(' ')[1];
-            // if (token == null) return res.sendStatus(401);
-            // jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
-            //     if(payload.sub==listing.agentID){
-            //         req.body.photo = req.file.path;
-            //         await roomController.assignRoom(req.body.listingID, req.body);
-            //         res.send(await listingController.getListingsById(req.body.listingID));
-            //     }
-            //     else res.send("Not authorized to update this listing");
-            // });
+        try {
+            const listing = await listingController.getListingsById(req.body.listingID);
+            const authHeader = req.headers['authorization'];
+            const token = authHeader && authHeader.split(' ')[1];
+            if (token == null) return res.sendStatus(401);
+            jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
+                if(payload.sub==listing.agentID){
+                    req.body.photo = req.file.path;
+                    await roomController.assignRoom(req.body.listingID, req.body);
+                    res.send(await listingController.getListingsById(req.body.listingID));
+                }
+                else res.send("Not authorized to update this listing");
+            });
         } catch (err) {
             next(err);
             console.error(err);
