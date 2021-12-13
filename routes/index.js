@@ -80,7 +80,7 @@ rootRouter.delete(
 
 rootRouter.get(
     '/listing:page',
-    adaptor.getAllListings);
+    adaptor.getLimitedListings);
 
 rootRouter.get(
     '/listing/:listingID',
@@ -135,6 +135,9 @@ rootRouter.post('/user/login',
     loginValidationRules(),
     validate,
     adaptor.loginUser);
+
+    rootRouter.get('/user/:userID',
+    adaptor.getPublicUser);
 
 rootRouter.post('/user/create',
 // upload.single('profile_image'),

@@ -29,7 +29,7 @@ module.exports = {
     },
     async getLimitedListings(nr) {
         try {
-            const listing = await Listing.find().skip(nr).limit(5).populate('room').limit();
+            const listing = await Listing.find().skip(parseInt(nr, 10)).limit(5).populate('room').limit();
             return listing;
         } catch (err) {
             throw err;

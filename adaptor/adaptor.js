@@ -64,14 +64,14 @@ module.exports = {
     },
     async getAllListings(req, res, next) {
         try {
-            res.send(listingController.getAllListings());
+            res.send(await listingController.getAllListings());
         } catch (err) {
             next(err);
         }
     },
     async getLimitedListings(req, res, next) {
         try {
-            res.send(listingController.getLimitedListings(req.params.page));
+            res.send(await listingController.getLimitedListings(req.params.page));
         } catch (err) {
             next(err);
         }
@@ -210,6 +210,15 @@ module.exports = {
     async getUserById(req, res, next) {
         try {
             const user = await userController.getUserById(req.params.userID);
+            res.send(user);
+        } catch (err) {
+            throw new Error(err.body);
+        }
+    },
+    async getPublicUser(req, res, next) {
+        try {
+            const user = await userController.getUserById(req.params.userID);
+            delete user.password;
             res.send(user);
         } catch (err) {
             throw new Error(err.body);
