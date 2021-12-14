@@ -43,7 +43,7 @@ ground_size:{
     required:true
 },
 energy_level:{
-    type:Number,
+    type:String,
     required:true
 },
 thumbnail:{

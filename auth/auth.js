@@ -1,7 +1,9 @@
 const jwt = require('express-jwt');
 require('dotenv').config();
 
-module.exports = authorize;
+const jwtt = require('jsonwebtoken');
+
+module.exports = {authorize,authorizeRequest};
 
 function authorize(roles = []) {
     const secret=process.env.ACCESS_TOKEN_SECRET;
@@ -26,4 +28,18 @@ function authorize(roles = []) {
             next();
         }
     ];
+}
+
+function authorizeRequest(req, res, next) {
+    try {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+        if (token == null) return res.sendStatus(401);
+        jwtt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
+            res.send(payload.role);
+            });
+    } catch (err) {
+        next(err);
+        console.error(err);
+    }
 }

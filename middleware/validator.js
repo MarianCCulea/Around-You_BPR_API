@@ -47,9 +47,7 @@ const adminValidationRules = () => {
 
 const roomValidationRules = () => {
   return [
-    check('listingID').notEmpty().withMessage('Listing ID is required'),
     check('infoPanel').notEmpty().withMessage('infoPanel is required'),
-    check('photo').notEmpty().withMessage('infoPanel is required'),
   ]
 }
 

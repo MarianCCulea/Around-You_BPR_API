@@ -86,7 +86,7 @@ module.exports = {
     //room methods
     async assignRoom(req, res, next) {
         try {
-            const listing = await listingController.getListingsById(req.body.listingID);
+            const listing = await listingController.getListingsById(req.params.listingID);
             const authHeader = req.headers['authorization'];
             const token = authHeader && authHeader.split(' ')[1];
             if (token == null) return res.sendStatus(401);

@@ -10,7 +10,7 @@ const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-const authorize = require('../auth/auth.js');
+const {authorize,authorizeRequest} = require('../auth/auth.js');
 const Role = require('../auth/role.js');
 const bodyParser = require('body-parser');
 
@@ -49,6 +49,11 @@ rootRouter.post(
         res.send(req.body);
     });
 
+    rootRouter.get(
+        '/authorize', 
+        authorize(),
+authorizeRequest
+        );
 
 rootRouter.post(
     '/listing',
@@ -135,7 +140,7 @@ rootRouter.post('/user/login',
     validate,
     adaptor.loginUser);
 
-    rootRouter.get('/user/:userID',
+rootRouter.get('/user/:userID',
     adaptor.getPublicUser);
 
 rootRouter.post('/user/create',
