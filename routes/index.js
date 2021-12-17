@@ -50,8 +50,7 @@ rootRouter.post(
     });
 
     rootRouter.get(
-        '/authorize', 
-        authorize(),
+        '/authorize',
 authorizeRequest
         );
 

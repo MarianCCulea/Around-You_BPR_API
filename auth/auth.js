@@ -34,10 +34,11 @@ function authorizeRequest(req, res, next) {
     try {
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split(' ')[1];
-        if (token == null) return res.sendStatus(401);
+        if (token == null) return res.send("N/A");
         jwtt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
             res.send(payload.role);
             });
+            
     } catch (err) {
         next(err);
         console.error(err);
