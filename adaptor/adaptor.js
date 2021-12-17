@@ -7,13 +7,13 @@ module.exports = {
     //listing methods
     async createListing(req, res, next) {
         try {
-            req.body.thumbnail=req.file.path;
+            req.body.thumbnail = req.file.path;
             const authHeader = req.headers['authorization'];
             const token = authHeader && authHeader.split(' ')[1];
             if (token == null) return res.sendStatus(401);
-            jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
-                req.body['agentID']=payload.sub;
-                });
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
+                req.body['agentID'] = payload.sub;
+            });
             delete req.body.room;
             const oldListing = await listingController.createListing(req.body);
             res.send(await listingController.getListingsById(oldListing._id));
@@ -28,12 +28,12 @@ module.exports = {
             const authHeader = req.headers['authorization'];
             const token = authHeader && authHeader.split(' ')[1];
             if (token == null) return res.sendStatus(401);
-            jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
-                if(payload.sub==listing.agentID){
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
+                if (payload.sub == listing.agentID) {
                     res.send(await listingController.updateListing(req.body));
                 }
                 else res.send("Not authorized to update this listing");
-            });            
+            });
         } catch (err) {
             res.send(err);
         }
@@ -44,12 +44,12 @@ module.exports = {
             const authHeader = req.headers['authorization'];
             const token = authHeader && authHeader.split(' ')[1];
             if (token == null) return res.sendStatus(401);
-            jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
-                if(payload.sub==listing.agentID){
-                    res.send(await listingController.updateListing({thumbnail:req.file.path}));
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
+                if (payload.sub == listing.agentID) {
+                    res.send(await listingController.updateListing({ thumbnail: req.file.path }));
                 }
                 else res.send("Not authorized to update this listing");
-            });            
+            });
         } catch (err) {
             res.send(err);
         }
@@ -90,8 +90,8 @@ module.exports = {
             const authHeader = req.headers['authorization'];
             const token = authHeader && authHeader.split(' ')[1];
             if (token == null) return res.sendStatus(401);
-            jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
-                if(payload.sub==listing.agentID){
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
+                if (payload.sub == listing.agentID) {
                     req.body.photo = req.file.path;
                     await roomController.assignRoom(req.body.listingID, req.body);
                     res.send(await listingController.getListingsById(req.body.listingID));
@@ -109,9 +109,9 @@ module.exports = {
             const authHeader = req.headers['authorization'];
             const token = authHeader && authHeader.split(' ')[1];
             if (token == null) return res.sendStatus(401);
-            jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
-                if(payload.sub==listing.agentID){
-                   const newRoom=await roomController.updateRoom(req.body._id, req.body)
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
+                if (payload.sub == listing.agentID) {
+                    const newRoom = await roomController.updateRoom(req.body._id, req.body)
                     res.send(newRoom);
                 }
                 else res.send("Not authorized to update this listing");
@@ -139,7 +139,7 @@ module.exports = {
     },
     async getRooms(req, res, next) {
         try {
-            const listing=await listingController.getListingsById(req.params.listingID)
+            const listing = await listingController.getListingsById(req.params.listingID)
             res.send(listing.room);
         } catch (err) {
             next(err);
@@ -150,14 +150,14 @@ module.exports = {
     async loginUser(req, res, next) {
         try {
             var userAccount = await userController.getUserByQuery({ username: req.body.username });
-            if(!userAccount) return res.send("UserNo exist");
-            if(!userAccount.is_active) res.send('Account is inactive');
+            if (!userAccount) return res.send("UserNo exist");
+            if (!userAccount.is_active) res.send('Account is inactive');
             const validPass = await bcrypt.compare(req.body.password, userAccount.password);
             if (validPass) {
                 //if is active!!!~
                 //token
                 const token = jwt.sign({ sub: userAccount._id, role: userAccount.role },
-                     process.env.ACCESS_TOKEN_SECRET);
+                    process.env.ACCESS_TOKEN_SECRET);
                 delete userAccount.password;
                 userAccount.token = token;
                 res.send(userAccount);
@@ -170,12 +170,12 @@ module.exports = {
     },
     async createUser(req, res, next) {
         try {
-            var userAccount = await userController.getUserByQuery({username:req.body.username});
+            var userAccount = await userController.getUserByQuery({ username: req.body.username });
             if (userAccount == null) {
                 const salt = await bcrypt.genSalt(10);
                 req.body.password = await bcrypt.hash(req.body.password, salt);
                 //req.body.profile_image = req.file.path;
-                const acc=await userController.createUser(req.body)
+                const acc = await userController.createUser(req.body)
                 res.send(acc);
             }
             else {
@@ -188,12 +188,12 @@ module.exports = {
     async updateUser(req, res, next) {
         try {
             const userAccount = await userController.getUserById(req.body._id);
-            if(!userAccount.is_active) res.send('Account is inactive');
+            if (!userAccount.is_active) res.send('Account is inactive');
             const authHeader = req.headers['authorization'];
             const token = authHeader && authHeader.split(' ')[1];
             if (token == null) return res.sendStatus(401);
-            jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
-                if(payload.sub==userAccount._id){
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
+                if (payload.sub == userAccount._id) {
                     const newUser = await userController.updateUser(req.body);
                     res.send(newUser);
                 }
@@ -226,8 +226,8 @@ module.exports = {
             const authHeader = req.headers['authorization'];
             const token = authHeader && authHeader.split(' ')[1];
             if (token == null) return res.sendStatus(401);
-            jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,async (err,payload)=>{
-                if(payload.sub==userAccount._id){
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
+                if (payload.sub == userAccount._id) {
                     await userController.deleteUser(req.params.userID);
                     res.sendStatus(200);
                 }
@@ -240,7 +240,16 @@ module.exports = {
     //message routes
     async addMessage(req, res, next) {
         try {
-            const user = await messageController.createMessage(req.params.agentName, req.body);
+
+            const authHeader = req.headers['authorization'];
+            const token = authHeader && authHeader.split(' ')[1];
+            if (token == null) return res.sendStatus(401);
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
+                const userAccount = await userController.getUserById(payload.sub);
+                req.body['sender_ID'] = payload.sub;
+                req.body['sender_name'] = userAccout.username;
+            })
+            const msg = await messageController.createMessage(req.params.agentID, req.body);
             res.send(user);
         } catch (err) {
             throw err;
@@ -248,8 +257,18 @@ module.exports = {
     },
     async getMessages(req, res, next) {
         try {
-            const msg = await messageController.getAllMessages(req.params.userID);
-            res.send(msg);
+            const authHeader = req.headers['authorization'];
+            const token = authHeader && authHeader.split(' ')[1];
+            if (token == null) return res.sendStatus(401);
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
+                if (payload.sub == req.params.agentID) {
+                    const msg = await messageController.getAllMessages(req.params.agentID);
+                    res.send(msg);
+                }
+                else {
+                    res.sendStatus(401).send("Not authorized");
+                }
+            })
         } catch (err) {
             throw err;
         }

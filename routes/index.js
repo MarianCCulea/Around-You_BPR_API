@@ -162,14 +162,14 @@ rootRouter.delete('/user/:userID',
 );
 
 rootRouter.post(
-    '/message/:agentName',
+    '/message/:agentID',
     authorize([Role.User, Role.Admin]),
     messageValidationRules(),
     validate,
     adaptor.addMessage);
 
 rootRouter.get(
-    '/message/:userID',
+    '/message/:agentID',
     authorize(Role.Agent),
     adaptor.getMessages);
 

@@ -55,7 +55,7 @@ const messageValidationRules = () => {
   return [
     check('title').notEmpty().withMessage('Title is required'),
     check('content').notEmpty().withMessage('Content is required'),
-    check('sender_ID').notEmpty().withMessage('SenderID is required'),
+    check('sender_ID').isEmpty().withMessage('SenderID not allowed'),
   ]
 }
 

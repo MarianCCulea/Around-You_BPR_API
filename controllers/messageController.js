@@ -1,12 +1,11 @@
 const { Message, User } = require('../models');
 
 module.exports = {
-    async createMessage(agentName,message) {
+    async createMessage(agentID,message) {
         try {
             const newMessage = await Message.create(message);
-            const agent =await User.findOne({username:agentName,is_agent:true});
             await User.findByIdAndUpdate(
-                agent.id,
+                agentID,
                 {
                     $push: { messages: newMessage.id }
                 },
