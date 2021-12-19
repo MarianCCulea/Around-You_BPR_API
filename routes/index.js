@@ -143,7 +143,7 @@ rootRouter.get('/user/:userID',
     adaptor.getPublicUser);
 
 rootRouter.post('/user/create',
-// upload.single('profile_image'),
+   upload.single('profile_image'),
     userValidationRules(),
     validate,
     adaptor.createUser);
@@ -176,6 +176,7 @@ rootRouter.get(
 
 rootRouter.post('/admin/user',
     authorize(Role.Admin),
+    upload.single('profile_image'),
     adminValidationRules(),
     validate,
     adaptor.createUser);

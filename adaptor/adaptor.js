@@ -150,7 +150,7 @@ module.exports = {
     async loginUser(req, res, next) {
         try {
             var userAccount = await userController.getUserByQuery({ username: req.body.username });
-            if (!userAccount) return res.send("UserNo exist");
+            if (!userAccount) return res.sendStatus(401);
             if (!userAccount.is_active) res.send('Account is inactive');
             const validPass = await bcrypt.compare(req.body.password, userAccount.password);
             if (validPass) {
@@ -174,7 +174,25 @@ module.exports = {
             if (userAccount == null) {
                 const salt = await bcrypt.genSalt(10);
                 req.body.password = await bcrypt.hash(req.body.password, salt);
-                //req.body.profile_image = req.file.path;
+                req.body.profile_image = req.file.path;
+                const acc = await userController.createUser(req.body)
+                res.send(acc);
+            }
+            else {
+                res.sendStatus(402).send("Username is already taken");
+            }
+        } catch (err) {
+            res.sendStatus(401).send(err);
+        }
+    },
+    async createAgent(req, res, next) {
+        try {
+            var userAccount = await userController.getUserByQuery({ username: req.body.username });
+            if (userAccount == null) {
+                const salt = await bcrypt.genSalt(10);
+                req.body.password = await bcrypt.hash(req.body.password, salt);
+                req.body.profile_image = req.file.path;
+                req.body['role'] = 'Agent';
                 const acc = await userController.createUser(req.body)
                 res.send(acc);
             }
