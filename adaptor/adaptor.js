@@ -155,7 +155,6 @@ module.exports = {
             const validPass = await bcrypt.compare(req.body.password, userAccount.password);
             if (validPass) {
                 //if is active!!!~
-                //token
                 const token = jwt.sign({ sub: userAccount._id, role: userAccount.role },
                     process.env.ACCESS_TOKEN_SECRET);
                 delete userAccount.password;
