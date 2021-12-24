@@ -1,6 +1,18 @@
 const mongoose=require('mongoose');
 const Schema=mongoose.Schema;
 
+const pointSchema = new mongoose.Schema({
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
+  });
+
 const listingSchema=new Schema({
 title: {
     type:String,
@@ -18,8 +30,12 @@ house_no:{
     type:String,
     required:true
 },
+location: {
+    type: pointSchema,
+    required: true
+  },
 postal_code:{
-    type: String,
+    type:Number,
     required:true
 },
 year_of_construction:{
@@ -71,6 +87,10 @@ measure_time_on_market:{
 agentID:{
     type:String,
     required:true,
+},
+trafficScore:{
+    type:Number,
+    required:false,default:0
 },
 room: [{
     type: mongoose.Schema.Types.ObjectId,

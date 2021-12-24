@@ -44,10 +44,20 @@ const adminValidationRules = () => {
   ]
 }
 
-
 const roomValidationRules = () => {
   return [
     check('infoPanel').notEmpty().withMessage('infoPanel is required'),
+  ]
+}
+
+const searchValidationRules = () => {
+  return [
+    check('minprice').notEmpty().withMessage('infoPanel is required'),
+    check('maxprice').notEmpty().withMessage('infoPanel is required'),
+    check('minrooms').notEmpty().withMessage('infoPanel is required'),
+    check('maxrooms').notEmpty().withMessage('infoPanel is required'),
+    check('minsize').notEmpty().withMessage('infoPanel is required'),
+    check('maxsize').notEmpty().withMessage('infoPanel is required'),
   ]
 }
 
@@ -109,5 +119,6 @@ module.exports = {
   adminValidationRules,
   userUpdateValidationRules,
   userUpdateAdminValidationRules,
+  searchValidationRules,
   validate,
 }

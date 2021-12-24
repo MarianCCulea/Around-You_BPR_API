@@ -13,17 +13,18 @@
     "mongoose": "^6.0.13",
     "mongoose-double": "^0.0.1",
     "multer": "^1.4.3",
-    "multer-storage-cloudinary": "^4.0.0"
+    "multer-storage-cloudinary": "^4.0.0",
+    "node-geocoder": "^3.28.0"
   },
   "name": "nodedatabase",
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start":"node app.js",
+    "start": "node app.js",
     "test": "jest"
   },
-  "engines":{
-    "node":"16.13.0"
+  "engines": {
+    "node": "16.13.0"
   },
   "keywords": [],
   "author": "",

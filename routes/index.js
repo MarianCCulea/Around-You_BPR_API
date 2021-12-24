@@ -1,7 +1,7 @@
 const express = require('express');
 const { userValidationRules, roomValidationRules,
     messageValidationRules, listingValidationRules,
-    loginValidationRules, adminValidationRules, userUpdateValidationRules,
+    loginValidationRules, adminValidationRules, userUpdateValidationRules,searchValidationRules,
     userUpdateAdminValidationRules,
     validate } = require('../middleware/validator')
 const rootRouter = express.Router();
@@ -15,6 +15,9 @@ const Role = require('../auth/role.js');
 const bodyParser = require('body-parser');
 
 const jwt = require('jsonwebtoken');
+
+const NodeGeocoder = require('node-geocoder');
+
 
 rootRouter.use(bodyParser.urlencoded({ extended: true }))
 
@@ -49,6 +52,23 @@ rootRouter.post(
         res.send(req.body);
     });
 
+    rootRouter.get('/myRoute',async function (req, res, next) {
+        const options = {
+            provider: 'mapquest',
+          
+            // Optional depending on the providers
+            apiKey: 'JS7J6ydOXEOdUCdR5nZA3sH0Gda6JlmO', // for Mapquest, OpenCage, Google Premier
+            formatter: null // 'gpx', 'string', ...
+          };
+          
+          const geocoder = NodeGeocoder(options);
+          
+          // Using callback
+          const ress = await geocoder.geocode('Biruintei 55 Constanta');
+
+          res.send(ress);
+    });
+
     rootRouter.get(
         '/authorize',
 authorizeRequest
@@ -70,6 +90,13 @@ rootRouter.post(
     validate,
     adaptor.uploadListingPhoto);
 
+    rootRouter.post("/listingsearch",
+    adaptor.listingSearch);
+
+    rootRouter.post("/listingtraffic",
+    adaptor.incrementTraffic);
+
+
 rootRouter.put(
     '/listing',
     authorize([Role.Admin, Role.Agent]),
@@ -83,7 +110,7 @@ rootRouter.delete(
     adaptor.deleteListing);
 
 rootRouter.get(
-    '/listing:page',
+    '/listing/:page/:itemPerPage',
     adaptor.getLimitedListings);
 
 rootRouter.get(
