@@ -81,7 +81,7 @@ module.exports = {
     },
     async getLimitedListings(req, res, next) {
         try {
-            let listings=await listingController.getLimitedListings(req.params.page,req.parans.itemPerPage)
+            let listings=await listingController.getLimitedListings(parseInt(req.params.page, 10),parseInt(req.params.itemPerPage, 10))
             res.send(listings);
            // listingController.updateTraffic(listings,1);
             
