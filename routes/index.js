@@ -40,7 +40,6 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage: storage, limits: { fileSize: 51100000 } });
 
 //routes--------
-
 //listing routes
 
 rootRouter.post(
@@ -95,7 +94,6 @@ rootRouter.post(
 
     rootRouter.post("/listingtraffic",
     adaptor.incrementTraffic);
-
 
 rootRouter.put(
     '/listing',
