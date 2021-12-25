@@ -29,7 +29,7 @@ module.exports = {
     },
     async getLimitedListings(page,itemPerPage) {
         try {
-            const listing = await Listing.find({}, null, {sort: {createdAt: -1},skip:page * itemPerPage,limit:itemPerPage})   //find().skip(parseInt(nr, 10)).limit(5).populate('room').limit(); optional:skip(pageOptions.page * pageOptions.limit)
+            const listing = await Listing.find({}, null, {sort: {createdAt: -1},skip:page * itemPerPage,limit:itemPerPage}).populate('room');   //find().skip(parseInt(nr, 10)).limit(5).populate('room').limit(); optional:skip(pageOptions.page * pageOptions.limit)
             return listing;
         } catch (err) {
             throw err;
