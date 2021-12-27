@@ -15,10 +15,6 @@ content:{
 sender_ID:{
     type:String,
     required:true
-},
-sender_Name:{
-    type:String,
-    required:true
 }
 },{timestamps:true});
 

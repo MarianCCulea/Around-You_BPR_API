@@ -145,7 +145,7 @@ module.exports = {
             let query={$and:[priceQuery,propertySizeQuery,groundSizeQuery,yearQuery,typeQuery,postalQuery]};
             let listings=await listingController.getListingsByQuery(query)
             res.send(listings);
-            listingController.updateTraffic(listings,2);
+            listingController.updateTraffic(listings,1);
         } catch (err) {
             next(err);
         }
@@ -316,7 +316,7 @@ module.exports = {
             delete user.password;
             res.send(user);
         } catch (err) {
-            throw new Error(err.body);
+            res.send(err.body);
         }
     },
     async deleteUser(req, res, next) {
@@ -344,12 +344,10 @@ module.exports = {
             const token = authHeader && authHeader.split(' ')[1];
             if (token == null) return res.sendStatus(401);
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
-                const userAccount = await userController.getUserById(payload.sub);
                 req.body['sender_ID'] = payload.sub;
-                req.body['sender_name'] = userAccout.username;
             })
-            const msg = await messageController.createMessage(req.params.agentID, req.body);
-            res.send(user);
+              const msg = await messageController.createMessage(req.params.agentID, req.body);
+             res.send(msg);
         } catch (err) {
             throw err;
         }

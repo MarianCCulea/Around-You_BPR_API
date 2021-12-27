@@ -72,7 +72,7 @@ description:{
 },
 property_type:{
     type: String,
-    enum: [ "Appartment", "House" ],
+    enum: [ "Apartment", "House" ],
     required:true
 },
 is_active:{

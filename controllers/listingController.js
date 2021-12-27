@@ -53,7 +53,7 @@ module.exports = {
     },
     async getListingsByQuery(query) {
         try {
-            const listing = await Listing.find(query,null,{sort: {createdAt: -1},limit:20}).lean();
+            const listing = await Listing.find(query,null,{sort: {createdAt: -1},limit:20}).populate('room').lean();
             return listing;
         } catch (err) {
             throw err;

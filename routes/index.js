@@ -43,10 +43,10 @@ const upload = multer({ storage: storage, limits: { fileSize: 51100000 } });
 //listing routes
 
 rootRouter.post(
-    '/test', authorize([Role.Admin, Role.Agent]),
-    upload.single('thumbnail'),
-    listingValidationRules(),
-    validate, (req, res) => {
+    '/test',
+    // authorize([Role.Admin, Role.Agent]),
+    //upload.single('thumbnail'),
+     (req, res) => {
         console.log(req.body);
         res.send(req.body);
     });
