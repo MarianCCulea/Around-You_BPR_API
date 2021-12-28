@@ -3,8 +3,8 @@ const userValidationRules = () => {
   return [
     check('username').notEmpty().withMessage('Username or email is required'),
     check('password').notEmpty().withMessage('Password is required'),
-    check('first_name').notEmpty().withMessage('First_name is required'),
-    check('last_name').notEmpty().withMessage('Last_name is required'),
+    check('first_name').notEmpty().withMessage('First name is required'),
+    check('last_name').notEmpty().withMessage('Last name is required'),
     check('email').notEmpty().isEmail().toLowerCase().withMessage('Valid email is required'),
     check('phone').notEmpty().withMessage('Phone is required'),
     check('sex').notEmpty().withMessage('Sex is required'),

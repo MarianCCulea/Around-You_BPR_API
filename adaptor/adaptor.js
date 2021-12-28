@@ -260,10 +260,10 @@ module.exports = {
                 res.send(acc);
             }
             else {
-                res.sendStatus(402).send("Username is already taken");
+                res.sendStatus(404);
             }
         } catch (err) {
-            res.sendStatus(401).send(err);
+            res.sendStatus(402);
         }
     },
     async createAgent(req, res, next) {
@@ -278,10 +278,11 @@ module.exports = {
                 res.send(acc);
             }
             else {
-                res.sendStatus(402).send("Username is already taken");
+                res.sendStatus(404);
             }
         } catch (err) {
-            res.sendStatus(401).send(err);
+            res.sendStatus(402);
+            next();
         }
     },
     async updateUser(req, res, next) {
