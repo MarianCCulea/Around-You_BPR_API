@@ -299,7 +299,7 @@ module.exports = {
                 else res.send("Error");
             });
         } catch (err) {
-            throw new Error(err.body);
+            res.send(err.body);
         }
     },
     async getUserById(req, res, next) {
@@ -307,7 +307,7 @@ module.exports = {
             const user = await userController.getUserById(req.params.userID);
             res.send(user);
         } catch (err) {
-            throw new Error(err.body);
+           res.send(err.body);
         }
     },
     async getPublicUser(req, res, next) {
@@ -333,7 +333,7 @@ module.exports = {
                 else res.send("Error");
             });
         } catch (err) {
-            throw new Error(err.body);
+            res.send(err.body);
         }
     },
     //message routes
@@ -349,7 +349,7 @@ module.exports = {
               const msg = await messageController.createMessage(req.params.agentID, req.body);
              res.send(msg);
         } catch (err) {
-            throw err;
+            res.send(err.body);
         }
     },
     async getMessages(req, res, next) {
@@ -367,7 +367,7 @@ module.exports = {
                 }
             })
         } catch (err) {
-            throw err;
+            res.send(err.body);
         }
     }
 };
