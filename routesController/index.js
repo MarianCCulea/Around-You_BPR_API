@@ -51,7 +51,7 @@ rootRouter.post(
         res.send(req.body);
     });
 
-    rootRouter.get('/myRoute',async function (req, res, next) {
+    rootRouter.post('/myRoute',async function (req, res, next) {
         const options = {
             provider: 'mapquest',
           
@@ -63,7 +63,7 @@ rootRouter.post(
           const geocoder = NodeGeocoder(options);
           
           // Using callback
-          const ress = await geocoder.geocode('Biruintei 55 Constanta');
+          const ress = await geocoder.geocode(req.body.location);
 
           res.send(ress);
     });

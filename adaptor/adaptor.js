@@ -243,7 +243,7 @@ module.exports = {
                 userAccount.token = token;
                 res.send(userAccount);
             } else {
-                res.send("Wrong username or password.")
+                res.sendStatus(401);
             }
         } catch (err) {
             console.error(err);
