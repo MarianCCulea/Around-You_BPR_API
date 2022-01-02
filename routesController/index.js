@@ -204,7 +204,7 @@ rootRouter.post('/admin/user',
     upload.single('profile_image'),
     adminValidationRules(),
     validate,
-    adaptor.createUser);
+    adaptor.createAgent);
 
 rootRouter.put('/admin/user',
     authorize([Role.Admin]),
