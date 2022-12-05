@@ -1,4 +1,5 @@
- const adaptor = require('./adaptor');
+const adaptor = require("./adaptor");
 
 module.exports = {
-	adaptor}
+  adaptor,
+};

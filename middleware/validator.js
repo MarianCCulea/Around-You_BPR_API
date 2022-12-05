@@ -85,7 +85,7 @@ const listingValidationRules = () => {
     check('description').notEmpty().withMessage('Description is required'),
     check('property_type').notEmpty().withMessage('Street is required'),
     check('agentID').isEmpty().withMessage('Not allowed to specify agent ID'),
-    check('measure_time_on_market').isEmpty().withMessage('Not allowed to specify time on market'),
+    check('trafficScore').isEmpty().withMessage('Not allowed to specify Traffic Score'),
     check('room').isEmpty().withMessage('Not allowed to specify time on market'),
   ]
 }
@@ -104,7 +104,6 @@ const validate = (req, res, next) => {
   }
   const extractedErrors = []
   errors.array().map(err => extractedErrors.push({ [err.param]: err.msg }))
-
   return res.status(422).json({
     errors: extractedErrors,
   })
