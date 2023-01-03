@@ -12,7 +12,12 @@ const {
   validate,
 } = require("../middleware/validator");
 const rootRouter = express.Router();
-const { adaptor } = require("../adaptor");
+const {
+  adaptorListing,
+  adaptorMessage,
+  adaptorRoom,
+  adaptorUser,
+} = require("../adaptor");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
@@ -83,7 +88,7 @@ rootRouter.post(
   upload.single("thumbnail"),
   listingValidationRules(),
   validate,
-  adaptor.createListing
+  adaptorListing.createListing
 );
 
 rootRouter.post(
@@ -92,30 +97,33 @@ rootRouter.post(
   upload.single("thumbnail"),
   listingValidationRules(),
   validate,
-  adaptor.uploadListingPhoto
+  adaptorListing.uploadListingPhoto
 );
 
-rootRouter.post("/listingsearch", adaptor.listingSearch);
+rootRouter.post("/listingsearch", adaptorListing.listingSearch);
 
-rootRouter.post("/listingtraffic", adaptor.incrementTraffic);
+rootRouter.post("/listingtraffic", adaptorListing.incrementTraffic);
 
 rootRouter.put(
   "/listing",
   authorize([Role.Admin, Role.Agent]),
   listingValidationRules(),
   validate,
-  adaptor.updateListing
+  adaptorListing.updateListing
 );
 
 rootRouter.delete(
   "/listing/:listingID",
   authorize([Role.Admin, Role.Agent]),
-  adaptor.deleteListing
+  adaptorListing.deleteListing
 );
 
-rootRouter.get("/listing/:page/:itemPerPage", adaptor.getLimitedListings);
+rootRouter.get(
+  "/listing/:page/:itemPerPage",
+  adaptorListing.getLimitedListings
+);
 
-rootRouter.get("/listing/:listingID", adaptor.getListingsById);
+rootRouter.get("/listing/:listingID", adaptorListing.getListingsById);
 
 //room routes
 ////???????????
@@ -139,7 +147,7 @@ rootRouter.post(
   upload.single("image"),
   roomValidationRules(),
   validate,
-  adaptor.assignRoom
+  adaptorRoom.assignRoom
 );
 
 rootRouter.put(
@@ -148,7 +156,7 @@ rootRouter.put(
   upload.single("photo"),
   roomValidationRules(),
   validate,
-  adaptor.updateRoom
+  adaptorRoom.updateRoom
 );
 
 rootRouter.delete(
@@ -156,15 +164,15 @@ rootRouter.delete(
   authorize([Role.Admin, Role.Agent]),
   roomValidationRules(),
   validate,
-  adaptor.deleteRoom
+  adaptorRoom.deleteRoom
 );
 
-rootRouter.get("/room/:roomID", authorize(), adaptor.getRoom);
+rootRouter.get("/room/:roomID", authorize(), adaptorRoom.getRoom);
 
 rootRouter.get(
   "/room/listing/:listingID",
   //authorize(),
-  adaptor.getRooms
+  adaptorRoom.getRooms
 );
 
 //user routes
@@ -172,17 +180,17 @@ rootRouter.post(
   "/user/login",
   loginValidationRules(),
   validate,
-  adaptor.loginUser
+  adaptorUser.loginUser
 );
 
-rootRouter.get("/user/:userID", adaptor.getPublicUser);
+rootRouter.get("/user/:userID", adaptorUser.getPublicUser);
 
 rootRouter.post(
   "/user/create",
   upload.single("profile_image"),
   userValidationRules(),
   validate,
-  adaptor.createUser
+  adaptorUser.createUser
 );
 
 rootRouter.put(
@@ -190,13 +198,13 @@ rootRouter.put(
   authorize(),
   userUpdateValidationRules(),
   validate,
-  adaptor.updateUser
+  adaptorUser.updateUser
 );
 
 rootRouter.delete(
   "/user/:userID",
   authorize(),
-  adaptor.deleteUser
+  adaptorUser.deleteUser
   //error middleware
 );
 
@@ -205,10 +213,14 @@ rootRouter.post(
   authorize([Role.User, Role.Admin]),
   messageValidationRules(),
   validate,
-  adaptor.addMessage
+  adaptorMessage.addMessage
 );
 
-rootRouter.get("/message/:agentID", authorize(Role.Agent), adaptor.getMessages);
+rootRouter.get(
+  "/message/:agentID",
+  authorize(Role.Agent),
+  adaptorMessage.getMessages
+);
 
 //ADMIN routes
 
@@ -218,7 +230,7 @@ rootRouter.post(
   upload.single("profile_image"),
   adminValidationRules(),
   validate,
-  adaptor.createAgent
+  adaptorUser.createAgent
 );
 
 rootRouter.put(
@@ -226,7 +238,7 @@ rootRouter.put(
   authorize([Role.Admin]),
   userUpdateAdminValidationRules(),
   validate,
-  adaptor.updateUser
+  adaptorUser.updateUser
 );
 
 module.exports = rootRouter;

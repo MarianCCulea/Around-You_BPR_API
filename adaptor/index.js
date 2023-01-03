@@ -1,5 +1,11 @@
-const adaptor = require("./adaptor");
+const adaptorListing = require("./adaptorListing");
+const adaptorMessage = require("./adaptorMessage");
+const adaptorRoom = require("./adaptorRoom");
+const adaptorUser = require("./adaptorUser");
 
 module.exports = {
-  adaptor,
+  adaptorListing,
+  adaptorMessage,
+  adaptorRoom,
+  adaptorUser,
 };
